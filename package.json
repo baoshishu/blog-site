@@ -62,6 +62,7 @@
   "scripts": {
     "build": "gatsby build",
     "dev": "gatsby develop",
+    "deploy": "npm run build && qshell qupload qshell.config.json",
     "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
     "serve": "gatsby serve",
     "clean": "gatsby clean"
