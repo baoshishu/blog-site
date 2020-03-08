@@ -1,0 +1,7 @@
+{
+  "src_dir": "public",
+  "bucket": "baoshishu-blog",
+  "overwrite": true,
+  "skip_suffixes": ".DS_Store",
+  "rescan_local": true
+}
