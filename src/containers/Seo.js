@@ -1,19 +1,14 @@
-import React from 'react'
-import { useStaticQuery, graphql } from 'gatsby'
-import Helmet from 'react-helmet'
-import { Location } from '@reach/router'
-import { useLangKey } from '../components/I18nContext'
-import defaultImage from '../images/social.jpg'
-import { SchemaOrg } from './SchemaOrg'
+import React from "react"
+import { useStaticQuery, graphql } from "gatsby"
+import Helmet from "react-helmet"
+import { Location } from "@reach/router"
+import { useLangKey } from "../components/I18nContext"
+import defaultImage from "../images/social.jpg"
+import { SchemaOrg } from "./SchemaOrg"
 
 const locales = {
   en: {
-    description:
-      'The personal website of Greg Bergé. Learn and level-up about React & JavaScript.',
-  },
-  fr: {
-    description:
-      'Le site personnel de Greg Bergé. Apprenez et devenez meilleur en React et JavaScript.',
+    description: "报时树技术博客",
   },
 }
 
@@ -39,7 +34,7 @@ export function Seo({
   const langKey = useLangKey()
   const t = locales[langKey]
 
-  const title = customTitle || 'Greg Bergé'
+  const title = customTitle || "报时树博客"
   const description = customDescription || t.description
   const image = customImage || defaultImage
 
