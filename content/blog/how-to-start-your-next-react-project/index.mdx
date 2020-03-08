@@ -4,7 +4,7 @@ title: "如何开始你的下一个 React 项目"
 date: "2020-03-08"
 author: "Ryan Wang"
 published: true
-description: "在2020年启动一个新的 React 项目。"
+description: "在2020年开始一个新的 React 项目。"
 categories:
   - "javascript"
   - "react"
@@ -12,7 +12,7 @@ banner: "./images/banner.jpg"
 bannerCredit: ""
 ---
 
-启动一个 React 项目可以说是一个既简单又复杂的问题。你可能曾经为了折腾一个自己满意的 Webpack 配置伤透了脑筋。不过最近两年 React 社区涌现了很多相当优秀的工具帮助我们能够快速开始开发一个 React 项目；不过这也给我们带来了选择的烦恼。
+开始一个 React 项目可以说是一个既简单又复杂的问题。你可能曾经为了折腾一个自己满意的 Webpack 配置伤透了脑筋。不过最近两年 React 社区涌现了很多相当优秀的工具帮助我们能够快速开始开发一个 React 项目——不过这也给我们带来了选择的烦恼。
 
 ## TLDR
 
@@ -22,9 +22,9 @@ bannerCredit: ""
 - 重业务的个人小型项目，直接用 Parcel2(e.g. Todo 项目)
 - 重业务的公司大型项目，自己配置 Webpack，让项目的开发和构建完全可控.(e.g. 中后台管理系统)
 
----
-
-下面我们来对比一下几个市面上比较流行的方案。
+<br />
+<br />
+下面我们就来对比一下几个市面上比较流行的方案。
 
 ## Create React App
 
@@ -41,13 +41,13 @@ npm start
 - 零配置
 - 支持 PWA
 - 支持 SASS 等 CSS 预处理器
-- 通过升级`react-scripts`可以很容易使用到最新的功能.
+- 通过升级 `react-scripts` 可以很容易使用到最新的功能.
 - 支持直接 import SVG 图片成 React 组件
 
 缺点:
 
-- 不灵活.
-- 不支持服务端渲染.
+- 不灵活, 如果希望定制需要 eject
+- 不支持服务端渲染
 - 需要自己解决路由，文件结构，状态管理等问题
 
 ## Next.js
@@ -71,10 +71,10 @@ npm run dev
 
 - 学习曲线比较陡峭, 需要理解 SSR 的相关概念
 - 坑比较多，动态路由和嵌套路由比较复杂
-- 需要一定的后端开发能力，并且部署 nodejs 服务器
-- Debug 难度增加，`getInitialProps`的代码在前端和服务端都可能运行，需要考虑上下文
+- 需要一定的后端开发能力，并且额外部署 nodejs 服务器
+- Debug 难度增加，`getInitialProps` 的代码在前端和服务端都可能运行，需要考虑上下文
 
-Gatsby
+## Gatsby
 
 [Gatsby](https://www.gatsbyjs.org/) 是一个构建静态网站的 React 框架。 Gatsby 会在构建的时候通过预渲染(pre-render)的方式把 React 组件生成静态的 HTML。
 
@@ -107,9 +107,8 @@ npm i -D parcel@next
 
 创建`index.html`和`index.js`.
 
-index.html
-
 ```html
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -126,9 +125,8 @@ index.html
 </html>
 ```
 
-index.js
-
 ```jsx
+// index.js
 import React from "react"
 
 import ReactDOM from "react-dom"
@@ -162,4 +160,4 @@ npm run parcel index.html
 
 ## 小结
 
-现在我们已经了解了各种流行的创建 React 项目的方式以及他们的优缺点，你不妨回到 [TLDR](#tldr) 再看一下是否还有疑问。希望这边文章对你选择如何开始下一个 React 项目会有所帮助。
+现在我们已经了解了各种流行的创建 React 项目的方式以及他们各自的优缺点，你不妨回到 [TLDR](#tldr) 再看一下是否还有疑问。希望这边文章对你选择如何开始下一个 React 项目会有所帮助。

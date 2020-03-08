@@ -1,8 +1,8 @@
-import React from 'react'
-import styled, { up, css } from '@xstyled/styled-components'
-import { PageContainer, Container } from '../components/Container'
-import dotBg from '../assets/dot-bg.svg'
-import heroBg from '../assets/hero.svg'
+import React from "react"
+import styled, { up, css } from "@xstyled/styled-components"
+import { PageContainer, Container } from "../components/Container"
+import dotBg from "../assets/dot-bg.svg"
+import heroBg from "../assets/hero.svg"
 
 const Dots = styled.div`
   pointer-events: none;
@@ -44,18 +44,18 @@ export const HeroIntro = styled.p`
 
 export const HeroTitle = styled.h1`
   margin: 0;
-  font-size: 40;
-  font-weight: 700;
+  font-size: 20;
+  font-weight: 400;
 
   strong {
     color: lighter;
   }
 
   ${up(
-    'md',
+    "md",
     css`
-      font-size: 70;
-    `,
+      font-size: 30;
+    `
   )}
 `
 
@@ -67,7 +67,7 @@ export const HeroTeaser = styled.p`
 
 export function Hero({ children }) {
   return (
-    <PageContainer forwardedAs="section" minHeight="85vh">
+    <PageContainer forwardedAs="section" minHeight="45vh">
       <Dots />
       <MixBackground />
       <Container position="relative">{children}</Container>

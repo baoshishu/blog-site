@@ -1,8 +1,12 @@
-import React from 'react'
-import styled, { Box, keyframes, th } from '@xstyled/styled-components'
-import { FaTwitter, FaFacebook } from 'react-icons/fa'
-import { TwitterShareButton, FacebookShareButton } from 'react-share'
-import { useLangKey } from './I18nContext'
+import React from "react"
+import styled, { Box, keyframes, th } from "@xstyled/styled-components"
+import { FaTwitter, FaFacebook } from "react-icons/fa"
+import {
+  TwitterShareButton,
+  FacebookShareButton,
+  WeiboShareButton,
+} from "react-share"
+import { useLangKey } from "./I18nContext"
 
 const InnerShare = styled.div`
   font-size: 18;
@@ -34,7 +38,7 @@ const InnerShare = styled.div`
 `
 
 const neon = p => {
-  const red = th.color('danger')(p)
+  const red = th.color("danger")(p)
 
   return keyframes`
     from {
@@ -57,10 +61,7 @@ const Line = styled.div`
 
 const locales = {
   en: {
-    share: `Share article`,
-  },
-  fr: {
-    share: `Partager l’article`,
+    share: `分享`,
   },
 }
 

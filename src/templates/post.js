@@ -1,44 +1,44 @@
-import React from 'react'
-import { graphql, Link } from 'gatsby'
-import styled, { up, css, th } from '@xstyled/styled-components'
-import MDXRenderer from 'gatsby-plugin-mdx/mdx-renderer'
-import Img from 'gatsby-image'
-import { MDXProvider } from '@mdx-js/react'
-import Markdown from 'react-markdown'
-import { Location } from '@reach/router'
-import { useLangKey } from '../components/I18nContext'
-import { PageContainer } from '../components/Container'
-import { Code } from '../components/Code'
-import { Share } from '../components/Share'
-import { Seo } from '../containers/Seo'
+import React from "react"
+import { graphql, Link } from "gatsby"
+import styled, { up, css, th } from "@xstyled/styled-components"
+import MDXRenderer from "gatsby-plugin-mdx/mdx-renderer"
+import Img from "gatsby-image"
+import { MDXProvider } from "@mdx-js/react"
+import Markdown from "react-markdown"
+import { Location } from "@reach/router"
+import { useLangKey } from "../components/I18nContext"
+import { PageContainer } from "../components/Container"
+import { Code } from "../components/Code"
+import { Share } from "../components/Share"
+import { Seo } from "../containers/Seo"
 
 export function formatReadingTime(minutes) {
   const cups = Math.round(minutes / 5)
   if (cups > 5) {
     return `${new Array(Math.round(cups / Math.E))
-      .fill('🍳')
-      .join('')} ${minutes} min read`
+      .fill("🍳")
+      .join("")} ${minutes} min read`
   }
-  return `${new Array(cups || 1).fill('🥐').join('')} ${minutes} min read`
+  return `${new Array(cups || 1).fill("🥐").join("")} ${minutes} min read`
 }
 
 // `lang` is optional and will default to the current user agent locale
 export function formatPostDate(date, lang) {
-  if (typeof Date.prototype.toLocaleDateString !== 'function') {
+  if (typeof Date.prototype.toLocaleDateString !== "function") {
     return date
   }
 
   date = new Date(date)
   const args = [
     lang,
-    { day: 'numeric', month: 'long', year: 'numeric' },
+    { day: "numeric", month: "long", year: "numeric" },
   ].filter(Boolean)
   return date.toLocaleDateString(...args)
 }
 
 const components = {
   code: ({ children, className, ...props }) => {
-    const lang = className && className.split('-')[1]
+    const lang = className && className.split("-")[1]
     return (
       <Code lang={lang} {...props}>
         {children}
@@ -58,7 +58,7 @@ const Article = styled.article`
 
     time {
       &:after {
-        content: '-';
+        content: "-";
         margin: 0 2;
       }
     }
@@ -77,13 +77,13 @@ const Article = styled.article`
     margin: 5 -4;
 
     .gatsby-image-wrapper {
-      box-shadow: 0 20px 50px ${th.color('shadow-dark')};
+      box-shadow: 0 20px 50px ${th.color("shadow-dark")};
 
       ${up(
-        'md',
+        "md",
         css`
           border-radius: 20;
-        `,
+        `
       )}
     }
   }
@@ -112,17 +112,17 @@ const Article = styled.article`
 
   h1 {
     margin: 0;
-    font-size: 44;
+    font-size: 25;
     line-height: 1.3;
     text-align: center;
     font-weight: 500;
     color: lighter;
 
     ${up(
-      'md',
+      "md",
       css`
-        font-size: 54;
-      `,
+        font-size: 40;
+      `
     )}
   }
 
@@ -186,7 +186,7 @@ const Article = styled.article`
     font-size: 28;
     line-height: 38rpx;
     font-style: italic;
-    quotes: '“' '”';
+    quotes: "“" "”";
   }
 
   blockquote:before {
@@ -218,10 +218,10 @@ const Article = styled.article`
   }
 
   ${up(
-    'md',
+    "md",
     css`
       font-size: 21;
-    `,
+    `
   )};
 `
 
@@ -257,26 +257,21 @@ const DiscussEdit = styled.box`
 `
 
 const langs = {
-  fr: 'Français',
-  en: 'English',
+  fr: "Français",
+  en: "English",
 }
 
 const locales = {
   en: {
     alternate: `This article is also available in:`,
-    discuss: 'Discuss on Twitter',
-    edit: 'Edit on GitHub',
-  },
-  fr: {
-    alternate: `Cet article est aussi disponible en :`,
-    discuss: 'Discuter sur Twitter',
-    edit: 'Éditer sur GitHub',
+    discuss: "Discuss on Twitter",
+    edit: "Edit on GitHub",
   },
 }
 
 function getDiscussUrl(location) {
   return encodeURI(
-    `https://twitter.com/search?q=https://gregberge.com${location.pathname}`,
+    `https://twitter.com/search?q=https://gregberge.com${location.pathname}`
   )
 }
 
@@ -301,19 +296,19 @@ export default function Post({ data }) {
             <h1>{frontmatter.title}</h1>
             <section className="metadata">
               <time dateTime={frontmatter.date}>
-                {formatPostDate(frontmatter.date, 'en')}
+                {formatPostDate(frontmatter.date, "en")}
               </time>
               <span>{formatReadingTime(data.mdx.timeToRead)}</span>
             </section>
             <figure className="top-img">
               <Img fluid={frontmatter.banner.childImageSharp.fluid} />
-              <Markdown renderers={{ paragraph: 'figcaption' }}>
+              <Markdown renderers={{ paragraph: "figcaption" }}>
                 {frontmatter.bannerCredit}
               </Markdown>
             </figure>
             {alternate && (
               <Alternate>
-                {t.alternate}{' '}
+                {t.alternate}{" "}
                 <Link to={alternate.fields.link}>
                   {langs[alternate.fields.langKey]}
                 </Link>
@@ -326,14 +321,14 @@ export default function Post({ data }) {
             {({ location }) => (
               <>
                 <DiscussEdit>
-                  <a href={getDiscussUrl(location)}>{t.discuss}</a>
-                  <span>•</span>
+                  {/* <a href={getDiscussUrl(location)}>{t.discuss}</a>
+                  <span>•</span> */}
                   <a href={data.mdx.fields.editLink}>{t.edit}</a>
                 </DiscussEdit>
-                <Share
+                {/* <Share
                   url={`${data.site.siteMetadata.canonicalUrl}${location.pathname}`}
                   title={frontmatter.title}
-                />
+                /> */}
               </>
             )}
           </Location>

@@ -61,7 +61,7 @@ export function AppFooter() {
         <SocialLink title={t.github} href="https://github.com/baoshishu">
           <FaGithub />
         </SocialLink>
-        <SocialLink title={t.linkedin} href="https://vipkit.com">
+        <SocialLink title={t.site} href="https://vipkit.com">
           <FaRegGem />
         </SocialLink>
         <SocialLink title={t.email} href="mailto:dev@baoshishu.com">

@@ -1,12 +1,12 @@
-import { createGlobalStyle, th } from '@xstyled/styled-components'
-import { normalize } from 'polished'
+import { createGlobalStyle, th } from "@xstyled/styled-components"
+import { normalize } from "polished"
 
 export const GlobalStyle = createGlobalStyle`
   ${normalize()}
 
   html, body { 
     margin: 0;
-    font-family: sans-serif;
+    font-family: -apple-system,BlinkMacSystemFont,Helvetica Neue,PingFang SC,Microsoft YaHei,Source Han Sans SC,Noto Sans CJK SC,WenQuanYi Micro Hei,sans-serif;
     -webkit-font-smoothing: antialiased;
     color: text;
     line-height: 1.4;
@@ -28,7 +28,7 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   *:focus {
-    outline-color: ${th.color('accent')};
+    outline-color: ${th.color("accent")};
   }
 
   button {

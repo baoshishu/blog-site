@@ -11,10 +11,9 @@ export default function IndexPage({ data }) {
     <>
       <Hero>
         <Seo />
-        <HeroIntro>你好, 我们是</HeroIntro>
+        <HeroIntro>你好, 我们是报时树技术团队。</HeroIntro>
         <HeroTitle>
-          <strong>报时树技术团队.</strong>
-          <br /> 我们希望用技术为线下商家提供更加优质的导流获客和会员营销服务.
+          我们希望用技术为线下商家提供更加优质的导流获客和会员营销服务。
         </HeroTitle>
         <HeroTeaser>如果你有兴趣，欢迎加入我们。</HeroTeaser>
       </Hero>
