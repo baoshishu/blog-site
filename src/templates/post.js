@@ -156,7 +156,7 @@ const Article = styled.article`
   a {
     transition: base;
     color: lighter;
-    border-bottom: 1px dotted;
+    /* border-bottom: 1px dotted; */
     border-bottom-color: lighter;
 
     * {

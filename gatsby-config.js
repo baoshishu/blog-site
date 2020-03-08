@@ -68,6 +68,7 @@ module.exports = {
         extensions: [".mdx", ".md", ".markdown"],
         gatsbyRemarkPlugins: [
           { resolve: "gatsby-remark-copy-linked-files" },
+          "gatsby-remark-autolink-headers",
           {
             resolve: "gatsby-remark-images",
             options: {
@@ -79,6 +80,7 @@ module.exports = {
         ],
       },
     },
+
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,
     {

@@ -12,14 +12,14 @@ banner: "./images/banner.jpg"
 bannerCredit: ""
 ---
 
-开始一个 React 项目可以说是一个既简单又复杂的问题。你可能曾经为了折腾一个自己满意的 Webpack 配置伤透了脑筋。不过最近两年 React 社区涌现了很多相当优秀的工具帮助我们能够快速开始开发一个 React 项目——不过这也给我们带来了选择的烦恼。
+开始一个 React 项目可以说是一个既简单又复杂的问题。你可能曾经为了折腾一个自己满意的 Webpack 配置伤透了脑筋。庆幸的是最近两年 React 社区涌现了很多相当优秀的工具帮助我们能够快速开始开发一个 React 项目——不过这也给我们带来了选择的烦恼。
 
 ## TLDR
 
 - 需要做一个 Demo 应用或者快速验证一个想法，用 Create React App
-- 需要支持服务端渲染、SEO 友好并且需要展示大量动态生成的数据（e.g. 电商、预约、订票)
-- 大多数业务只是静态页面的展示, 同时需要 SEO 友好,用 Gatsby(e.g. 个人博客、产品介绍网站、公司官网)
-- 重业务的个人小型项目，直接用 Parcel2(e.g. Todo 项目)
+- 需要支持服务端渲染、SEO 友好并且需要展示大量动态生成的数据, 用 Next.js（e.g. 电商、预约、订票)
+- 大多数业务只是静态页面的展示, 同时需要 SEO 友好,用 Gatsby(e.g. 博客、产品介绍网站、公司官网)
+- 重业务的个人小型项目，直接用 Parcel2
 - 重业务的公司大型项目，自己配置 Webpack，让项目的开发和构建完全可控.(e.g. 中后台管理系统)
 
 <br />
@@ -28,7 +28,7 @@ bannerCredit: ""
 
 ## Create React App
 
-[Create React App(CRA)](https://create-react-app.dev/) 可以帮助我们迅速搭建一个可用的 React 项目，由 React 官方维护，开箱即用，免去了配置 Webpack 的烦恼。
+[Create React App(CRA)](https://create-react-app.dev/) 可以帮助我们迅速搭建一个可用的 React 项目，由 React 官方维护，开箱即用，免去了配置 Webpack 的烦恼。迅速上手：
 
 ```bash
 npx create-react-app my-app
@@ -46,13 +46,13 @@ npm start
 
 缺点:
 
-- 不灵活, 如果希望定制需要 eject
+- 不灵活, 如果希望定制需要手动 eject
 - 不支持服务端渲染
-- 需要自己解决路由，文件结构，状态管理等问题
+- 不支持 HRM 或 Fast Refresh
 
 ## Next.js
 
-[Next.js](https://nextjs.org/) 是一个服务端渲染(SSR)的 React 框架, 类似于后端的 Ruby on Rails，提供了一个完整的 SSR 解决方案。
+[Next.js](https://nextjs.org/) 是一个服务端渲染(SSR)的 React 框架，提供了一个完整的 SSR 解决方案。迅速上手：
 
 ```bash
 npx create-next-app next-app
@@ -65,7 +65,7 @@ npm run dev
 - SSR 支持, SEO 友好
 - 详细的交互式的文档
 - 可以定制 Babel 和 Webpack 的选项可参数
-- 也可以通过 pre-render 的方式生成[静态网站](https://nextjs.org/learn/excel/static-html-export)
+- 也可以通过 [pre-render](https://nextjs.org/docs/basic-features/pages#pre-rendering) 的方式生成静态网站
 
 缺点：
 
@@ -76,7 +76,7 @@ npm run dev
 
 ## Gatsby
 
-[Gatsby](https://www.gatsbyjs.org/) 是一个构建静态网站的 React 框架。 Gatsby 会在构建的时候通过预渲染(pre-render)的方式把 React 组件生成静态的 HTML。
+[Gatsby](https://www.gatsbyjs.org/) 是一个构建静态网站的 React 框架。 Gatsby 会在构建的时候通过预渲染(pre-render)的方式把 React 组件生成静态的 HTML。迅速上手：
 
 ```bash
 npx gatsby new gatsby-app
@@ -98,14 +98,14 @@ npm run develop
 
 ## Parcel2
 
-[Parcel2](https://github.com/parcel-bundler/parcel) 是一个零配置的打包工具
+[Parcel2](https://github.com/parcel-bundler/parcel) 是一个零配置的打包工具。迅速上手：
 
 ```bash
 mkdir parcel-app && cd parcel-app
 npm i -D parcel@next
 ```
 
-创建`index.html`和`index.js`.
+创建 `index.html` 和 `index.js`.
 
 ```html
 <!-- index.html -->
@@ -145,7 +145,7 @@ npm run parcel index.html
 优点
 
 - 零配置
-- 打包速度快，细粒度的缓存.
+- 打包速度快，细粒度的缓存。
 - 支持 [Fast Refresh](https://github.com/parcel-bundler/parcel/pull/3654)，极大提升了开发体验
 
 缺点

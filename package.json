@@ -54,6 +54,9 @@
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.18.0",
     "eslint-plugin-react-hooks": "^2.3.0",
+    "gatsby-remark-autolink-headers": "^2.1.25",
+    "gatsby-remark-prismjs": "^3.3.33",
+    "gatsby-transformer-remark": "^2.6.55",
     "prettier": "^1.19.1"
   },
   "scripts": {
