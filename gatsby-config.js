@@ -55,13 +55,13 @@ module.exports = {
     },
     `gatsby-plugin-styled-components`,
     `gatsby-plugin-react-helmet`,
-    {
-      resolve: `gatsby-plugin-google-fonts`,
-      options: {
-        fonts: [`Source Code Pro`, `Muli:400,400i,500,700`],
-        display: "swap",
-      },
-    },
+    // {
+    //   resolve: `gatsby-plugin-google-fonts`,
+    //   options: {
+    //     fonts: [`Source Code Pro`, `Muli:400,400i,500,700`],
+    //     display: "swap",
+    //   },
+    // },
     {
       resolve: "gatsby-plugin-mdx",
       options: {
