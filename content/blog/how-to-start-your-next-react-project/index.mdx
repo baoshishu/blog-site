@@ -41,7 +41,7 @@ npm start
 - 零配置
 - 支持 PWA
 - 支持 SASS 等 CSS 预处理器
-- 通过升级 `react-scripts` 可以很容易使用到最新的功能.
+- 通过升级 **react-scripts** 可以很容易使用到最新的功能.
 - 支持直接 import SVG 图片成 React 组件
 
 缺点:
@@ -65,7 +65,7 @@ npm run dev
 - SSR 支持, SEO 友好
 - 详细的交互式的文档
 - 可以定制 Babel 和 Webpack 的选项可参数
-- 也可以通过 [pre-render](https://nextjs.org/docs/basic-features/pages#pre-rendering) 的方式生成静态网站
+- 也可以通过 [**pre-render**](https://nextjs.org/docs/basic-features/pages#pre-rendering) 的方式生成静态网站
 
 缺点：
 
@@ -88,13 +88,14 @@ npm run develop
 
 - 丰富的社区插件.
 - 开发体验好，支持 HMR
-- 直接生成静态网站.
-- 部署方便，可以直接把生成的静态网站托管到 CDN 上面
+- 直接生成静态网站
+- 部署方便，可以直接把构建目录托管到 CDN 上面
 
 缺点:
 
 - 同样学习曲线比较陡峭
-- 需要开发者了解 GraphQL
+- [太多黑科技](https://www.gatsbyjs.org/docs/gatsby-internals/),构建过程复杂，不易理解
+- 需要开发者了解 **GraphQL**
 
 ## Parcel2
 
@@ -150,14 +151,14 @@ npm run parcel index.html
 
 缺点
 
-- Parcel2 还是 Alpa 版本，bug 比较多
+- Parcel2 还是 **Alpha** 版本，bug 比较多
 - 文档稀缺，很多问题缺少现成的解决方案, 需要自己踩坑
 
 ## 自己配置 Webpack
 
-我们也可以从零开始自己配置`webpack.config.js`, 优点是整个开发构建流程都完全可控，不过相应也增加了维护和更新配置的成本.
+我们也可以从零开始自己配置 webpack.config.js, 优点是整个开发构建流程都完全可控，不过相应也增加了维护和更新配置的成本.
 如果你需要一个比较合理的基础配置，不妨参考 [react-starter-kit](https://github.com/ryanwang520/react-starter-kit).
 
 ## 小结
 
-现在我们已经了解了各种流行的创建 React 项目的方式以及他们各自的优缺点，你不妨回到 [TLDR](#tldr) 再看一下是否还有疑问。希望这边文章对你选择如何开始下一个 React 项目会有所帮助。
+现在我们已经了解了各种流行的创建 React 项目的方式以及他们各自的优缺点，你不妨回到 [TLDR](#tldr) 再看一下是否还有疑问。希望这篇文章对你开始下一个 React 项目会有所帮助。
