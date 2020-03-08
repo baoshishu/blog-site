@@ -21,7 +21,8 @@ export function AppLayout({ children, langKey }) {
         <Location>
           {({ location }) => (
             <Helmet>
-              <html lang={langKey} />
+              {/* <html lang={langKey} /> */}
+              <html lang="zh" />
               <link
                 rel="alternate"
                 hrefLang={langKey === "fr" ? "en" : "fr"}

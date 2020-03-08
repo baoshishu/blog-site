@@ -34,7 +34,7 @@ export function Seo({
   const langKey = useLangKey()
   const t = locales[langKey]
 
-  const title = customTitle || "报时树博客"
+  const title = customTitle || "报时树技术博客"
   const description = customDescription || t.description
   const image = customImage || defaultImage
 
