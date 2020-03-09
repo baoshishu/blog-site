@@ -1,7 +1,10 @@
-import React from 'react'
-import styled from '@xstyled/styled-components'
-import { PageContainer } from '../components/Container'
-import { SectionDescription } from '../components/Section'
+import React from "react"
+import styled from "@xstyled/styled-components"
+import { PageContainer } from "../components/Container"
+import { SectionDescription } from "../components/Section"
+import Img404 from "../images/star_wars_kyloren_ren.gif"
+// import Img404 from "../images/social.jpg"
+import { useStaticQuery } from "gatsby"
 
 const Title = styled.h1`
   color: lighter;
@@ -9,8 +12,19 @@ const Title = styled.h1`
 `
 
 export default function NotFound() {
+  const {
+    site: { siteMetadata },
+  } = useStaticQuery(graphql`
+    {
+      site {
+        siteMetadata {
+          canonicalUrl
+        }
+      }
+    }
+  `)
   return (
-    <PageContainer style={{ textAlign: 'center' }}>
+    <PageContainer style={{ textAlign: "center" }}>
       <Title>Page not found</Title>
       <SectionDescription>
         We couldn’t find what you were looking for... <br />
@@ -20,8 +34,9 @@ export default function NotFound() {
         <a href="https://dribbble.com/shots/2402048-Kylo-is-waiting">
           <img
             alt="Kylo is waiting"
-            src="https://cdn.dribbble.com/users/469578/screenshots/2402048/star_wars_kyloren_ren.gif"
-            style={{ width: '100%' }}
+            src={`${siteMetadata.canonicalUrl}${Img404}`}
+            // src={Img404}
+            style={{ width: "100%" }}
           />
         </a>
       </div>

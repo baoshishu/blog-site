@@ -1,8 +1,8 @@
-const defaultSiteUrl = "https://blog.baoshishu.com"
+const defaultSiteUrl = ""
 
 const {
   NODE_ENV,
-  URL: NETLIFY_SITE_URL = defaultSiteUrl,
+  URL: NETLIFY_SITE_URL = "https://blog.baoshishu.com",
   DEPLOY_PRIME_URL: NETLIFY_DEPLOY_URL = NETLIFY_SITE_URL,
   CONTEXT: NETLIFY_ENV = NODE_ENV,
 } = process.env
