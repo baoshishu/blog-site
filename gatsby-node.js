@@ -8,7 +8,7 @@ function getLangKey(node) {
 
 function getPath(node) {
   if (node.fields.langKey === DEFAULT_LANG_KEY)
-    return `/blog/${node.frontmatter.slug}`
+    return `/${node.frontmatter.slug}`
   return `/${node.fields.langKey}/blog/${node.frontmatter.slug}`
 }
 

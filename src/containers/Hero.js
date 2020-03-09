@@ -38,7 +38,6 @@ const MixBackground = styled.div`
 export const HeroIntro = styled.p`
   font-family: monospace;
   font-size: 16;
-  margin: 0;
   color: accent;
 `
 

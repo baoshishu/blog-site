@@ -40,6 +40,7 @@ const theme = {
     gray900: "#212529",
 
     danger: "#FF5252",
+    textLink: "#d23669",
 
     lighter: th.color("white"),
     light100: "#DCDFF7",
@@ -59,6 +60,7 @@ const theme = {
     modes: {
       light: {
         lighter: "#100F4D",
+        textLink: "#d23669",
         light950: "#F6F6F6",
         light900: "#EFEFF5",
         light800: "#F5F5F5",
@@ -72,6 +74,7 @@ const theme = {
         accent: "#b54909",
       },
       "monochrome-light": {
+        textLink: "#d23669",
         lighter: th.color("black"),
         light100: th.color("gray900"),
         light200: th.color("gray800"),
@@ -87,6 +90,7 @@ const theme = {
         accent: th.color("black"),
       },
       "monochrome-dark": {
+        textLink: "#ffa7c4",
         lighter: th.color("white"),
         light100: th.color("gray100"),
         light200: th.color("gray200"),

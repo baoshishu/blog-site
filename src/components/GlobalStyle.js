@@ -28,7 +28,8 @@ export const GlobalStyle = createGlobalStyle`
   }
   a.anchor {
     stroke: ${th.color("accent")};
-    box-shadow: 'none',
+    box-shadow: none;
+    border-bottom: none;
   }
   .anchor {
       float: left;
@@ -68,6 +69,7 @@ export const GlobalStyle = createGlobalStyle`
 
   a {
     color: inherit;
+    
     text-decoration: none;
   }
 

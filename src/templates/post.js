@@ -155,9 +155,10 @@ const Article = styled.article`
 
   a {
     transition: base;
-    color: lighter;
-    /* border-bottom: 1px dotted; */
-    border-bottom-color: lighter;
+    /* color: lighter; */
+    color: textLink;
+    border-bottom: 1px dotted;
+    border-bottom-color: textLink;
 
     * {
       transition: base;
@@ -265,7 +266,7 @@ const locales = {
   en: {
     alternate: `This article is also available in:`,
     discuss: "Discuss on Twitter",
-    edit: "Edit on GitHub",
+    edit: "去 GitHub 编辑",
   },
 }
 
