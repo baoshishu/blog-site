@@ -3,8 +3,8 @@ import { useStaticQuery, graphql } from "gatsby"
 import { Helmet } from "react-helmet"
 import { Location } from "@reach/router"
 import { useLangKey } from "../components/I18nContext"
-// import defaultImage from "../images/social.jpg"
-// import { SchemaOrg } from "./SchemaOrg"
+import defaultImage from "../images/social.png"
+import { SchemaOrg } from "./SchemaOrg"
 
 const locales = {
   zh: {
@@ -15,8 +15,8 @@ const locales = {
 export function Seo({
   title: customTitle,
   description: customDescription,
-  // image: customImage,
-  // datePublished,
+  image: customImage,
+  datePublished,
   isBlogPost,
 }) {
   const {
@@ -36,7 +36,7 @@ export function Seo({
 
   const title = customTitle || "报时树技术博客"
   const description = customDescription || t.description
-  // const image = customImage || defaultImage
+  const image = customImage || defaultImage
 
   return (
     <Location>
@@ -49,10 +49,10 @@ export function Seo({
               {/* General tags */}
               <title>{title}</title>
               <meta name="description" content={description} />
-              {/* <meta
+              <meta
                 name="image"
                 content={`${siteMetadata.canonicalUrl}${image}`}
-              /> */}
+              />
               <link rel="canonical" href={url} />
 
               {/* OpenGraph tags */}
@@ -62,31 +62,31 @@ export function Seo({
               ) : null}
               <meta property="og:title" content={title} />
               <meta property="og:description" content={description} />
-              {/* <meta
+              <meta
                 property="og:image"
                 content={`${siteMetadata.canonicalUrl}${image}`}
-              /> */}
+              />
 
               {/* Twitter Card tags */}
               <meta name="twitter:card" content="summary_large_image" />
               <meta name="twitter:creator" content="@neoziro" />
               <meta name="twitter:title" content={title} />
               <meta name="twitter:description" content={description} />
-              {/* <meta
+              <meta
                 name="twitter:image"
                 content={`${siteMetadata.canonicalUrl}${image}`}
-              /> */}
+              />
             </Helmet>
-            {/* <SchemaOrg
+            <SchemaOrg
               title={title}
               url={url}
-              defaultTitle="Greg Bergé"
+              defaultTitle="报时树技术博客"
               isBlogPost={isBlogPost}
               image={image}
               description={description}
               canonicalUrl={siteMetadata.canonicalUrl}
               datePublished={datePublished}
-            /> */}
+            />
           </>
         )
       }}
