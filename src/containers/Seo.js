@@ -15,8 +15,8 @@ const locales = {
 export function Seo({
   title: customTitle,
   description: customDescription,
-  image: customImage,
-  datePublished,
+  // image: customImage,
+  // datePublished,
   isBlogPost,
 }) {
   const {

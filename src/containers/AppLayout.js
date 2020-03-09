@@ -20,7 +20,7 @@ export function AppLayout({ children, langKey }) {
     <I18nProvider langKey={langKey}>
       <ThemeInitializer>
         <Location>
-          {({ location }) => (
+          {() => (
             <Helmet>
               <html lang={langKey} />
               {/* <link

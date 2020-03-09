@@ -26,7 +26,7 @@ export function AppNavbar() {
       <NavbarBrandLink as={I18nLink} to="/">
         <NavbarBrand>报时树技术博客</NavbarBrand>
       </NavbarBrandLink>
-      <NavbarSecondary></NavbarSecondary>
+      <NavbarSecondary />
     </Navbar>
   )
 }

@@ -326,7 +326,7 @@ export default function Post({ data }) {
             <MDXRenderer>{body}</MDXRenderer>
           </Article>
           <Location>
-            {({ location }) => (
+            {() => (
               <>
                 <DiscussEdit>
                   {/* <a href={getDiscussUrl(location)}>{t.discuss}</a>

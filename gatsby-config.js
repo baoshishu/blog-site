@@ -1,4 +1,4 @@
-const defaultSiteUrl = ""
+// const defaultSiteUrl = ""
 
 const {
   NODE_ENV,

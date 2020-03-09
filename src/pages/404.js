@@ -1,10 +1,10 @@
 import React from "react"
 import styled from "@xstyled/styled-components"
+import { useStaticQuery, graphql } from "gatsby"
 import { PageContainer } from "../components/Container"
 import { SectionDescription } from "../components/Section"
 import Img404 from "../images/star_wars_kyloren_ren.gif"
 // import Img404 from "../images/social.jpg"
-import { useStaticQuery, graphql } from "gatsby"
 
 const Title = styled.h1`
   color: lighter;
