@@ -299,7 +299,7 @@ export default function Post({ data }) {
               <time dateTime={frontmatter.date}>
                 {formatPostDate(frontmatter.date, "en")}
               </time>
-              <span>{formatReadingTime(data.mdx.timeToRead)}</span>
+              <span>{formatReadingTime(data.mdx.fields.readingTime.text)}</span>
             </section>
             <figure className="top-img">
               <Img fluid={frontmatter.banner.childImageSharp.fluid} />
@@ -352,6 +352,9 @@ export const pageQuery = graphql`
       timeToRead
       fields {
         editLink
+        readingTime {
+          text
+        }
       }
       frontmatter {
         title
