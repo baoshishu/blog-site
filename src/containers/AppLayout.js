@@ -12,7 +12,7 @@ import { ThemeInitializer } from "../components/Theme"
 import { I18nProvider, toEnglish, toFrench } from "../components/I18nContext"
 import { AppNavbar } from "./AppNavbar"
 import { AppFooter } from "./AppFooter"
-import { Newsletter } from "./Newsletter"
+// import { Newsletter } from "./Newsletter"
 
 export function AppLayout({ children, langKey }) {
   return (

@@ -9,7 +9,7 @@ import { Location } from "@reach/router"
 import { useLangKey } from "../components/I18nContext"
 import { PageContainer } from "../components/Container"
 import { Code } from "../components/Code"
-import { Share } from "../components/Share"
+// import { Share } from "../components/Share"
 import { Seo } from "../containers/Seo"
 
 export function formatReadingTime(minutes) {
@@ -273,11 +273,11 @@ const locales = {
   },
 }
 
-function getDiscussUrl(location) {
-  return encodeURI(
-    `https://twitter.com/search?q=https://gregberge.com${location.pathname}`
-  )
-}
+// function getDiscussUrl(location) {
+//   return encodeURI(
+//     `https://twitter.com/search?q=https://gregberge.com${location.pathname}`
+//   )
+// }
 
 export default function Post({ data }) {
   const langKey = useLangKey()

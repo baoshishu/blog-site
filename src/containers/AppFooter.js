@@ -1,17 +1,12 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
 import React from "react"
-import { Link } from "gatsby"
-import styled, { Box } from "@xstyled/styled-components"
-import {
-  FaTwitter,
-  FaGithub,
-  FaLinkedin,
-  FaEnvelope,
-  FaRegGem,
-} from "react-icons/fa"
-import { Location } from "@reach/router"
+// import { Link } from "gatsby"
+import styled from "@xstyled/styled-components"
+import { FaGithub, FaEnvelope, FaRegGem } from "react-icons/fa"
+// import { Location } from "@reach/router"
 import { Container } from "../components/Container"
-import { useLangKey, toEnglish, toFrench } from "../components/I18nContext"
+// import { useLangKey, toEnglish, toFrench } from "../components/I18nContext"
+import { useLangKey } from "../components/I18nContext"
 
 const Copyright = styled.div`
   color: light400;

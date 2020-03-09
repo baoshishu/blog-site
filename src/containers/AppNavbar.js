@@ -4,22 +4,23 @@ import {
   NavbarBrand,
   NavbarBrandLink,
   NavbarSecondary,
-  NavbarLink,
+  // NavbarLink,
 } from "../components/Navbar"
-import { useLangKey, I18nLink } from "../components/I18nContext"
+// import { useLangKey, I18nLink } from "../components/I18nContext"
+import { I18nLink } from "../components/I18nContext"
 
-const locales = {
-  en: {
-    site: "网站",
-    blog: "Blog",
-    workshops: "Workshops",
-    projects: "Projects",
-  },
-}
+// const locales = {
+//   en: {
+//     site: "网站",
+//     blog: "Blog",
+//     workshops: "Workshops",
+//     projects: "Projects",
+//   },
+// }
 
 export function AppNavbar() {
-  const langKey = useLangKey()
-  const t = locales[langKey]
+  // const langKey = useLangKey()
+  // const t = locales[langKey]
   return (
     <Navbar>
       <NavbarBrandLink as={I18nLink} to="/">

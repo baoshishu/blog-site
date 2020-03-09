@@ -1,8 +1,8 @@
 import React from "react"
 import styled, { css, up } from "@xstyled/styled-components"
-import { useDialogState, Dialog, DialogDisclosure } from "reakit/Dialog"
+// import { useDialogState } from "reakit/Dialog"
 import { Container } from "./Container"
-import { Burger } from "./Burger"
+// import { Burger } from "./Burger"
 import { DarkModeSwitcher } from "./DarkModeSwitcher"
 
 export const Nav = styled.nav`
@@ -86,95 +86,95 @@ export const NavbarLink = styled.a`
   )}
 `
 
-const MobileMenuContainer = styled.div`
-  position: fixed;
-  background-color: navbar-bg;
-  backdrop-filter: blur(8px);
-  top: 60;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 100;
-  padding: 3 0;
-  overflow: auto;
+// const MobileMenuContainer = styled.div`
+//   position: fixed;
+//   background-color: navbar-bg;
+//   backdrop-filter: blur(8px);
+//   top: 60;
+//   right: 0;
+//   bottom: 0;
+//   left: 0;
+//   z-index: 100;
+//   padding: 3 0;
+//   overflow: auto;
 
-  &:focus {
-    outline: none;
-  }
+//   &:focus {
+//     outline: none;
+//   }
 
-  &[data-animated] {
-    transition: 300ms ease-out;
-    transition-property: opacity, transform;
+//   &[data-animated] {
+//     transition: 300ms ease-out;
+//     transition-property: opacity, transform;
 
-    &[data-animating="true"] {
-      opacity: 1;
-      transform: translateY(0);
+//     &[data-animating="true"] {
+//       opacity: 1;
+//       transform: translateY(0);
 
-      &.hidden {
-        opacity: 0;
-        transform: translateX(-30vw);
-      }
-    }
-  }
+//       &.hidden {
+//         opacity: 0;
+//         transform: translateX(-30vw);
+//       }
+//     }
+//   }
 
-  ${up(
-    "md",
-    css`
-      display: none;
-    `
-  )}
-`
+//   ${up(
+//     "md",
+//     css`
+//       display: none;
+//     `
+//   )}
+// `
 
-function MobileMenu({ children, ...props }) {
-  const [show, setShow] = React.useState(false)
-  React.useEffect(() => {
-    setShow(true)
-  }, [])
-  const handleClick = event => {
-    if (event.target.tagName === "A") {
-      props.hide()
-    }
-  }
+// function MobileMenu({ children, ...props }) {
+//   const [show, setShow] = React.useState(false)
+//   React.useEffect(() => {
+//     setShow(true)
+//   }, [])
+//   const handleClick = event => {
+//     if (event.target.tagName === "A") {
+//       props.hide()
+//     }
+//   }
 
-  if (!show) return null
-  return (
-    <Dialog
-      onClick={handleClick}
-      aria-label="Menu"
-      data-animated={props.unstable_animated}
-      data-animating={props.unstable_animating}
-      {...props}
-    >
-      {dialogProps => (
-        <MobileMenuContainer
-          {...dialogProps}
-          onTransitionEnd={event => {
-            if (
-              event.target &&
-              event.target.dataset &&
-              event.target.dataset.animated
-            ) {
-              dialogProps.onTransitionEnd(event)
-            }
-          }}
-        >
-          <Container height="100%" display="flex" flexDirection="column">
-            {children}
-          </Container>
-        </MobileMenuContainer>
-      )}
-    </Dialog>
-  )
-}
+//   if (!show) return null
+//   return (
+//     <Dialog
+//       onClick={handleClick}
+//       aria-label="Menu"
+//       data-animated={props.unstable_animated}
+//       data-animating={props.unstable_animating}
+//       {...props}
+//     >
+//       {dialogProps => (
+//         <MobileMenuContainer
+//           {...dialogProps}
+//           onTransitionEnd={event => {
+//             if (
+//               event.target &&
+//               event.target.dataset &&
+//               event.target.dataset.animated
+//             ) {
+//               dialogProps.onTransitionEnd(event)
+//             }
+//           }}
+//         >
+//           <Container height="100%" display="flex" flexDirection="column">
+//             {children}
+//           </Container>
+//         </MobileMenuContainer>
+//       )}
+//     </Dialog>
+//   )
+// }
 
-function MobileMenuDisclosure(props) {
-  return <DialogDisclosure aria-label="Toggle menu" as={Burger} {...props} />
-}
+// function MobileMenuDisclosure(props) {
+//   return <DialogDisclosure aria-label="Toggle menu" as={Burger} {...props} />
+// }
 
 export function Navbar({ children }) {
-  const dialog = useDialogState({ unstable_animated: true, visible: false })
-  const childrenArray = React.Children.toArray(children)
-  const secondary = childrenArray.find(child => child.type === NavbarSecondary)
+  // const dialog = useDialogState({ unstable_animated: true, visible: false })
+  // const childrenArray = React.Children.toArray(children)
+  // const secondary = childrenArray.find(child => child.type === NavbarSecondary)
   return (
     <Nav>
       {/* <MobileMenu {...dialog}>{secondary.props.children}</MobileMenu> */}
