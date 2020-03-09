@@ -4,7 +4,7 @@ import { PageContainer } from "../components/Container"
 import { SectionDescription } from "../components/Section"
 import Img404 from "../images/star_wars_kyloren_ren.gif"
 // import Img404 from "../images/social.jpg"
-import { useStaticQuery } from "gatsby"
+import { useStaticQuery, graphql } from "gatsby"
 
 const Title = styled.h1`
   color: lighter;
