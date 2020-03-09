@@ -262,12 +262,13 @@ const DiscussEdit = styled.box`
 `
 
 const langs = {
-  fr: "Français",
+  // fr: "Français",
   en: "English",
+  zh: "中文",
 }
 
 const locales = {
-  en: {
+  zh: {
     alternate: `This article is also available in:`,
     discuss: "Discuss on Twitter",
     edit: "去 GitHub 编辑",

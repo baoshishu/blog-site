@@ -1,4 +1,4 @@
-const DEFAULT_LANG_KEY = "en"
+const DEFAULT_LANG_KEY = "zh"
 
 function getLangKey(node) {
   const matches = node.fileAbsolutePath.match(/\.([a-z]{2})\.md/)

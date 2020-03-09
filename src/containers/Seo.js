@@ -7,7 +7,7 @@ import { useLangKey } from "../components/I18nContext"
 // import { SchemaOrg } from "./SchemaOrg"
 
 const locales = {
-  en: {
+  zh: {
     description: "报时树技术博客",
   },
 }

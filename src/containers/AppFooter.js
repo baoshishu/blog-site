@@ -39,7 +39,7 @@ const SocialLink = styled.a`
 const currentYear = new Date().getFullYear()
 
 const locales = {
-  en: {
+  zh: {
     github: "GitHub",
     site: "Vipkit网站",
     email: "发送邮件",
