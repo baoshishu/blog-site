@@ -9,7 +9,8 @@ import {
 } from "../components/Layout"
 import { GlobalStyle } from "../components/GlobalStyle"
 import { ThemeInitializer } from "../components/Theme"
-import { I18nProvider, toEnglish, toFrench } from "../components/I18nContext"
+// import { I18nProvider, toEnglish, toFrench } from "../components/I18nContext"
+import { I18nProvider } from "../components/I18nContext"
 import { AppNavbar } from "./AppNavbar"
 import { AppFooter } from "./AppFooter"
 // import { Newsletter } from "./Newsletter"
@@ -21,15 +22,14 @@ export function AppLayout({ children, langKey }) {
         <Location>
           {({ location }) => (
             <Helmet>
-              {/* <html lang={langKey} /> */}
-              <html lang="zh" />
-              <link
+              <html lang={langKey} />
+              {/* <link
                 rel="alternate"
                 hrefLang={langKey === "fr" ? "en" : "fr"}
                 href={`https://gregberge.com${
                   langKey === "fr" ? toEnglish(location) : toFrench(location)
                 }`}
-              />
+              /> */}
             </Helmet>
           )}
         </Location>
