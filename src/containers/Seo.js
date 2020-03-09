@@ -1,6 +1,6 @@
 import React from "react"
 import { useStaticQuery, graphql } from "gatsby"
-import Helmet from "react-helmet"
+import { Helmet } from "react-helmet"
 import { Location } from "@reach/router"
 import { useLangKey } from "../components/I18nContext"
 // import defaultImage from "../images/social.jpg"
