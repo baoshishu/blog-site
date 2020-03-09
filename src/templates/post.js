@@ -13,6 +13,7 @@ import { Share } from "../components/Share"
 import { Seo } from "../containers/Seo"
 
 export function formatReadingTime(minutes) {
+  minutes = Math.round(minutes)
   const cups = Math.round(minutes / 5)
   if (cups > 5) {
     return `${new Array(Math.round(cups / Math.E))
@@ -153,12 +154,14 @@ const Article = styled.article`
     text-align: justify;
   }
 
+  a:not(.anchor) {
+    border-bottom: 1px dotted;
+    border-bottom-color: textLink;
+  }
   a {
     transition: base;
     /* color: lighter; */
     color: textLink;
-    border-bottom: 1px dotted;
-    border-bottom-color: textLink;
 
     * {
       transition: base;
@@ -299,7 +302,9 @@ export default function Post({ data }) {
               <time dateTime={frontmatter.date}>
                 {formatPostDate(frontmatter.date, "en")}
               </time>
-              <span>{formatReadingTime(data.mdx.fields.readingTime.text)}</span>
+              <span>
+                {formatReadingTime(data.mdx.fields.readingTime.minutes)}
+              </span>
             </section>
             <figure className="top-img">
               <Img fluid={frontmatter.banner.childImageSharp.fluid} />
@@ -354,6 +359,7 @@ export const pageQuery = graphql`
         editLink
         readingTime {
           text
+          minutes
         }
       }
       frontmatter {
