@@ -12,15 +12,15 @@ banner: "./images/banner.jpg"
 bannerCredit: ""
 ---
 
-开始一个 React 项目可以说是一个既简单又复杂的问题。你可能曾经为了折腾一个自己满意的 Webpack 配置伤透了脑筋。庆幸的是最近两年 React 社区涌现了很多相当优秀的工具帮助我们能够快速开始开发一个 React 项目——不过这也给我们带来了选择的烦恼。
+开始一个 React 项目可以说是一个既简单又复杂的问题。你可能曾经为了折腾一个自己满意的 webpack 配置伤透了脑筋。庆幸的是最近两年 React 社区涌现了很多相当优秀的工具帮助我们能够快速开始开发一个 React 项目——不过这也给我们带来了选择的烦恼。
 
 ## TLDR
 
 - 需要做一个 Demo 应用或者快速验证一个想法，用 Create React App
 - 需要支持服务端渲染、SEO 友好并且需要展示大量动态生成的数据, 用 Next.js（e.g. 电商、预约、订票)
 - 大多数业务只是静态页面的展示, 同时需要 SEO 友好,用 Gatsby(e.g. 博客、产品介绍网站、公司官网)
-- 重业务的个人小型项目，直接用 Parcel2
-- 重业务的公司大型项目，自己配置 Webpack，让项目的开发和构建完全可控.(e.g. 中后台管理系统)
+- 重业务的个人小型项目，直接用 Parcel 2
+- 重业务的公司大型项目，自己配置 webpack，让项目的开发和构建完全可控.(e.g. 中后台管理系统)
 
 <br />
 <br />
@@ -28,7 +28,7 @@ bannerCredit: ""
 
 ## Create React App
 
-[Create React App(CRA)](https://create-react-app.dev/) 可以帮助我们迅速搭建一个可用的 React 项目，由 React 官方维护，开箱即用，免去了配置 Webpack 的烦恼。迅速上手：
+[Create React App(CRA)](https://create-react-app.dev/) 可以帮助我们迅速搭建一个可用的 React 项目，由 React 官方维护，开箱即用，免去了配置 webpack 的烦恼。迅速上手：
 
 ```bash
 npx create-react-app my-app
@@ -42,13 +42,13 @@ npm start
 - 支持 PWA
 - 支持 SASS 等 CSS 预处理器
 - 通过升级 **react-scripts** 可以很容易使用到最新的功能.
-- 支持直接 import SVG 图片成 React 组件
+- 支持直接 [_import SVG_](https://create-react-app.dev/docs/adding-images-fonts-and-files/#adding-svgs) 图片成 React 组件
 
 缺点:
 
-- 不灵活, 如果希望定制需要手动 eject
+- 不灵活, 如果希望定制需要手动 ["eject"](https://create-react-app.dev/docs/available-scripts/#npm-run-eject)
 - 不支持服务端渲染
-- 不支持 HRM 或 Fast Refresh
+- 不支持 [HMR](https://webpack.js.org/guides/hot-module-replacement/) 或 [Fast Refresh](https://reactnative.dev/docs/fast-refresh)
 
 ## Next.js
 
@@ -64,15 +64,15 @@ npm run dev
 
 - SSR 支持, SEO 友好
 - 详细的交互式的文档
-- 可以定制 Babel 和 Webpack 的选项和参数
-- 也可以通过 [**pre-render**](https://nextjs.org/docs/basic-features/pages#pre-rendering) 的方式生成静态网站
+- 可以定制 Babel 和 webpack 的选项和参数
+- 也可以通过 [_pre-render_](https://nextjs.org/docs/basic-features/pages#pre-rendering) 的方式生成静态网站
 
 缺点：
 
 - 学习曲线比较陡峭, 需要理解 SSR 的相关概念
 - 坑比较多，动态路由和嵌套路由比较复杂
-- 需要一定的后端开发能力，并且额外部署 nodejs 服务器
-- Debug 难度增加，`getInitialProps` 的代码在前端和服务端都可能运行，需要考虑上下文
+- 需要一定的后端开发能力，并且额外部署 Node.js 服务器
+- Debug 难度增加，[_`getInitialProps`_](https://nextjs.org/docs/api-reference/data-fetching/getInitialProps) 的代码在浏览器和服务器都可能运行，需要考虑上下文
 
 ## Gatsby
 
@@ -89,24 +89,24 @@ npm run develop
 - 丰富的社区插件.
 - 开发体验好，支持 HMR
 - 直接生成静态网站
-- 部署方便，可以直接把构建目录托管到 CDN 上面
+- 部署方便，无需 _Node.js_ 服务, 可以直接把构建目录托管到 CDN 上
 
 缺点:
 
 - 同样学习曲线比较陡峭
 - [太多黑科技](https://www.gatsbyjs.org/docs/gatsby-internals/), 构建过程复杂，不易理解
-- 需要开发者了解 **GraphQL**
+- 需要开发者了解 [_GraphQL_](https://graphql.org/)
 
-## Parcel2
+## Parcel 2
 
-[Parcel2](https://github.com/parcel-bundler/parcel) 是一个零配置的打包工具。迅速上手：
+[Parcel 2](https://github.com/parcel-bundler/parcel) 是一个零配置的打包工具。迅速上手：
 
 ```bash
 mkdir parcel-app && cd parcel-app
 npm i -D parcel@next
 ```
 
-创建 `index.html` 和 `index.js`.
+创建 _index.html_ 和 _index.js_.
 
 ```html
 <!-- index.html -->
@@ -146,19 +146,19 @@ npm run parcel index.html
 优点:
 
 - 零配置
-- 打包速度快，细粒度的缓存。
-- 支持 [Fast Refresh](https://github.com/parcel-bundler/parcel/pull/3654)，极大提升了开发体验
+- 打包速度快，细粒度的缓存
+- 支持 [_Fast Refresh_](https://github.com/parcel-bundler/parcel/pull/3654)，极大提升了开发体验
 
 缺点:
 
-- Parcel2 还是 **Alpha** 版本，bug 比较多
+- Parcel 2 还是 **Alpha** 版本，_bug_ 比较多
 - 文档稀缺，很多问题缺少现成的解决方案, 需要自己踩坑
 
-## 自己配置 Webpack
+## 自己配置 webpack
 
-我们也可以从零开始自己配置 webpack.config.js, 优点是整个开发构建流程都完全可控，不过相应也增加了维护和更新配置的成本.
-如果你需要一个比较合理的基础配置，不妨参考 [react-starter-kit](https://github.com/ryanwang520/react-starter-kit).
+我们也可以从零开始自己配置 _webpack.config.js_, 优点是整个开发构建流程都完全可控，不过相应也增加了维护和更新配置的成本.
+如果你需要一个比较合理的基础配置，不妨参考 [_react-starter-kit_](https://github.com/ryanwang520/react-starter-kit).
 
 ## 小结
 
-现在我们已经了解了各种流行的创建 React 项目的方式以及他们各自的优缺点，你不妨回到 [TLDR](#tldr) 再看一下是否还有疑问。希望这篇文章对你开始下一个 React 项目会有所帮助。
+现在我们已经了解了各种流行的创建 React 项目的方式以及他们各自的优缺点，你不妨回到 [_TLDR_](#tldr) 再看一下是否还有疑问。希望这篇文章对你开始下一个 React 项目会有所帮助。

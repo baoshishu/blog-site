@@ -155,7 +155,7 @@ const Article = styled.article`
   }
 
   a:not(.anchor) {
-    border-bottom: 1px dotted;
+    border-bottom: 1px solid;
     border-bottom-color: textLink;
   }
   a {
@@ -169,7 +169,8 @@ const Article = styled.article`
 
     &:hover {
       color: accent;
-      border-bottom-color: accent;
+      border-bottom: none;
+      /* border-bottom-color: accent; */
 
       * {
         color: accent;
