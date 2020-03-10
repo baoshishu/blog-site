@@ -291,9 +291,14 @@ export default function Post({ data }) {
 
   const location = useLocation()
   const shareUrl = `${data.site.siteMetadata.canonicalUrl}${location.pathname}`
+
   const shareImageUrl = `${data.site.siteMetadata.canonicalUrl}${frontmatter.banner.childImageSharp.social.src}`
   useEffect(() => {
-    fetch(`https://api.vipkit.com/wx-tpd/sign_jsapi?url=${shareUrl}`)
+    fetch(
+      `https://api.vipkit.com/wx-tpd/sign_jsapi?url=${encodeURIComponent(
+        window.location.href.split("#")[0]
+      )}`
+    )
       .then(res => res.json())
       .then(data => {
         wx.config({
