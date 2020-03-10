@@ -1,16 +1,18 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { graphql, Link } from "gatsby"
 import styled, { up, css, th } from "@xstyled/styled-components"
 import MDXRenderer from "gatsby-plugin-mdx/mdx-renderer"
 import Img from "gatsby-image"
 import { MDXProvider } from "@mdx-js/react"
 import Markdown from "react-markdown"
-import { Location } from "@reach/router"
+import { Helmet } from "react-helmet"
+import { Location, useLocation } from "@reach/router"
 import { useLangKey } from "../components/I18nContext"
 import { PageContainer } from "../components/Container"
 import { Code } from "../components/Code"
 // import { Share } from "../components/Share"
 import { Seo } from "../containers/Seo"
+// import wx from "../static/weixin"
 
 export function formatReadingTime(minutes) {
   minutes = Math.round(minutes)
@@ -286,6 +288,45 @@ export default function Post({ data }) {
   const t = locales[langKey]
   const { alternate } = data
   const { frontmatter, body } = data.mdx
+
+  const location = useLocation()
+  const shareUrl = `${data.site.siteMetadata.canonicalUrl}${location.pathname}`
+  const shareImageUrl = `${data.site.siteMetadata.canonicalUrl}${frontmatter.banner.childImageSharp.social.src}`
+  useEffect(() => {
+    fetch(`https://api.vipkit.com/wx-tpd/sign_jsapi?url=${shareUrl}`)
+      .then(res => res.json())
+      .then(data => {
+        wx.config({
+          debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+          appId: "wx4f8c186240583bb0", // 必填，公众号的唯一标识
+          timestamp: data.timestamp, // 必填，生成签名的时间戳
+          nonceStr: data.noncestr, // 必填，生成签名的随机串
+          signature: data.signature, // 必填，签名
+          jsApiList: ["updateAppMessageShareData", "updateTimelineShareData"], // 必填，需要使用的JS接口列表
+        })
+        wx.ready(function() {
+          // 需在用户可能点击分享按钮前就先调用
+          console.log("start config")
+          wx.updateAppMessageShareData({
+            title: frontmatter.title, // 分享标题
+            desc: frontmatter.description, // 分享描述
+            link: shareUrl, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+            imgUrl: shareImageUrl, // 分享图标
+            success() {
+              console.log("config share message success")
+            },
+          })
+          wx.updateTimelineShareData({
+            title: frontmatter.title, // 分享标题
+            link: shareUrl, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+            imgUrl: shareImageUrl, // 分享图标
+            success() {
+              console.log("config share timeline success")
+            },
+          })
+        })
+      })
+  }, [shareUrl, frontmatter, shareImageUrl])
 
   return (
     <>
