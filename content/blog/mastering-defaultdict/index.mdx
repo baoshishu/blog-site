@@ -11,7 +11,7 @@ banner: "./images/banner.jpg"
 bannerCredit: ""
 ---
 
-相信大多 Python 开发者都曾经使用过 [`collections.defaultdict`](https://docs.python.org/3/library/collections.html#collections.defaultdict) (以下简称`defaultdict`)，但却不一定对它有着充分的理解。 下面我们一起来探索一下它的原理和使用场景。
+相信大多 Python 开发者都曾经使用过 [`collections.defaultdict`](https://docs.python.org/3/library/collections.html#collections.defaultdict) (以下简称 `defaultdict`)，但却不一定对它有着充分的理解。 下面我们一起来探索一下它的原理和使用场景。
 
 ## 原理
 
@@ -55,7 +55,7 @@ class defaultdict(dict):
         return val
 ```
 
-现在我们来一下 `defaultdict` 的使用姿势。
+现在我们来看一下 `defaultdict` 的使用姿势。
 
 ```python
 d = defaultdict(list, x=12)  # d == {}
@@ -102,7 +102,7 @@ m.append(12)   # 其他地方修改了 m
 assert d['x'] == [12]  # d['x'] 的值也更改了，不是我们期望的结果 []
 ```
 
-解决方案是把`m`放到`setup`函数里面, 保证只可能`setup`的返可以使用`m`
+解决方案是把 `m` 放到 `setup` 函数里面, 保证只可能 `setup` 的返可以使用 `m`
 
 ```python
 def setup():

@@ -131,14 +131,14 @@ const Article = styled.article`
   }
 
   h2 {
-    font-size: 28;
+    font-size: 24;
     font-weight: 500;
     color: lighter;
     margin: 5 0 2;
   }
 
   h3 {
-    font-size: 24;
+    font-size: 20;
     font-weight: 500;
     color: lighter;
     margin: 4 0 2;
