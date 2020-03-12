@@ -102,7 +102,7 @@ m.append(12)   # 其他地方修改了 m
 assert d['x'] == [12]  # d['x'] 的值也更改了，不是我们期望的结果 []
 ```
 
-解决方案是把 `m` 放到 `setup` 函数里面, 保证只可能 `setup` 的返可以使用 `m`
+解决方案是把 `m` 放到 `setup` 函数里面, 保证只有对应的 `defaultdict` 可以使用 `m`
 
 ```python
 def setup():
@@ -112,7 +112,7 @@ def setup():
 
 ## 实战分析
 
-### 需求：需要统计某天所有商品的销量和销售额并按照销量排序, 假设 API 定义的数据结构
+### 需求：需要统计某天所有商品的*销量*和*销售额*并按照*销量*排序, 假设 API 定义的数据结构如下:
 
 ```json
 [
@@ -152,7 +152,7 @@ return sorted(
         }
         for product, stats, in result.items()
     ],
-    key=lambda item: item["total"],
+    key=lambda item: item["quantity"],
     reverse=True,
 )
 ```
