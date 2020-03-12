@@ -1,0 +1,162 @@
+---
+slug: "mastering-defaultdict"
+title: "揭开 defaultdict 的秘密"
+date: "2020-03-12"
+author: "Ryan Wang"
+published: true
+description: "Python 的 collections.defaultdict 是一个非常实用工具。"
+categories:
+  - "Python"
+banner: "./images/banner.jpg"
+bannerCredit: ""
+---
+
+相信大多 Python 开发者都曾经使用过 [`collections.defaultdict`](https://docs.python.org/3/library/collections.html#collections.defaultdict) (以下简称`defaultdict`)，但却不一定对它有着充分的理解。 下面我们一起来探索一下它的原理和使用场景。
+
+## 原理
+
+`defaultdict` 继承了 `dict` 类。 首先看一下这个类的签名 `class collections.defaultdict([default_factory[, ...]])`, `defaultdict` 的 `__init__` 方法相较于 `dict` 多了一个参数 `default_factory`, 其余参数则是`dict`类的初始化参数, 大致的代码就是:
+
+```python
+class defaultdict(dict):
+    def __init__(self, default_factory, **kwargs):
+        self.default_factory = default_factory
+        super().__init__(**kwargs)
+```
+
+了解了初始化方法后，直接的问题就是这个 `default_factory` 的用途。
+
+官方文档是这样描述的: _This attribute is used by the `__missing__()` method; it is initialized from the first argument to the constructor, if present, or to None, if absent_.
+
+也就是说 `default_factory` 参数是为了给 `__missing__` 方法使用, 并且默认值为 `None`. 那我们先加上这个方法:
+
+```python
+class defaultdict(dict):
+    def __init__(self, default_factory=None, **kwargs):
+        self.default_factory = default_factory
+        super().__init__(**kwargs)
+
+    def __missing__(self, key): ...
+```
+
+那么 `__missing__` 方法是干嘛的呢？直接读[官方文档](https://docs.python.org/2/library/collections.html#collections.defaultdict.__missing__)我们可以知道，原来 Python 的 dict 类通过下标获取某个 key 对应的值的时候，会调用 `__getitem__` 方法， 如果这个方法抛出了 `KeyError` 并且子类定义了 [\_\_missing\_\_](https://docs.python.org/2/reference/datamodel.html#object.__missing__) 方法，`__missing__` 方法就会被调用。
+
+显然 `defaultdict` 通过实现 `__missing__` 方法， 在 `__missing__` 方法中调用了 `default_factory` 函数.
+
+```python
+class defaultdict(dict):
+    def __init__(self, default_factory=None, **kwargs):
+        self.default_factory = default_factory
+        super().__init__(**kwargs)
+
+    def __missing__(self, key):...
+        val = self.default_factory()
+        self[key] = val
+        return val
+```
+
+现在我们来一下 `defaultdict` 的使用姿势。
+
+```python
+d = defaultdict(list, x=12)  # d == {}
+assert d['x'] == 12          # 通过 __init__ 方法初始化
+assert d['a'] == []          # 没有找到 a, 调用 list() 返回空数组
+
+d['a'].append(1)
+assert d['a'] == [1]
+
+d['a'].append(2)
+assert d['a'] == [1, 2]
+```
+
+## `defaultdict`虽然很有用，但也有下面几个坑点:
+
+### 第一次取某个没有的 key 时插入了 `default_factory()` 的返回结果（读取数据竟然有副作用！）
+
+```python
+d = defaultdict(int)
+assert 'x' not in d  # 没找到 x
+d['x']               # __missing__ 方法被调用，插入了int()的结果 0 对应 key x
+assert 'x' int d     # 发现 x 已经是 d 的 key 了
+assert d['x'] == 0
+```
+
+### 如果不通过下标获取某个 key 的值，`__missing__` 方法不会触发, 对 `defaultdict` 最好不要用 `get` 方法
+
+```python
+d = defaultdict(int)
+d.get('x')            # get 方法 不触发 __missing__ hook
+d.setdefault('y', 12) # 如果没找到 y, 直接赋值 d[y] = 12
+```
+
+### default_factory 返回的值被其他地方引用, 当心取出的值不止这个 `defaultdict` 一个 owner
+
+```python
+m = []
+def setup():
+    return m
+
+d = defaultdict(setup)
+d['x']         # d['x'] == []
+m.append(12)   # 其他地方修改了 m
+assert d['x'] == [12]  # d['x'] 的值也更改了，不是我们期望的结果 []
+```
+
+解决方案是把`m`放到`setup`函数里面, 保证只可能`setup`的返可以使用`m`
+
+```python
+def setup():
+    m = []
+    return m
+```
+
+## 实战分析
+
+### 需求：需要统计某天所有商品的销量和销售额并按照销量排序, 假设 API 定义的数据结构
+
+```json
+[
+  {
+    "product_id": 100,
+    "quantity": 12,
+    "total": 50
+  }
+]
+```
+
+#### 实现
+
+```python
+def gen_default():
+    return {
+        "quantity": 0,
+        "total": 0,
+    }
+
+
+result = collections.defaultdict(gen_default)
+
+daily_orders = []
+
+for order in daily_orders:
+    for item in order.items:
+        result[item.product]["quantity"] += item.quantity
+        result[item.product]["total"] += item.quantity * item.price
+
+return sorted(
+    [
+        {
+            "product_id": product.id,
+            "quantity": stats["quantity"],
+            "total": stats["total"],
+        }
+        for product, stats, in result.items()
+    ],
+    key=lambda item: item["total"],
+    reverse=True,
+)
+```
+
+## 小结
+
+相信现在你已经知道了 `collections.defaultdict` 函数的一切，快去看看你的 Python 代码里面有没有可以用起来的地方吧。

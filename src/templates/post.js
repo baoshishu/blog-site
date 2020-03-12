@@ -154,7 +154,7 @@ const Article = styled.article`
   li,
   p {
     margin: 3 0;
-    text-align: justify;
+    /* text-align: justify; */
   }
 
   a:not(.anchor) {
