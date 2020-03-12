@@ -5,7 +5,8 @@ import MDXRenderer from "gatsby-plugin-mdx/mdx-renderer"
 import Img from "gatsby-image"
 import { MDXProvider } from "@mdx-js/react"
 import Markdown from "react-markdown"
-import { Helmet } from "react-helmet"
+import { Disqus, CommentCount } from "gatsby-plugin-disqus"
+
 import { Location, useLocation } from "@reach/router"
 import { useLangKey } from "../components/I18nContext"
 import { PageContainer } from "../components/Container"
@@ -291,6 +292,11 @@ export default function Post({ data }) {
 
   const location = useLocation()
   const shareUrl = `${data.site.siteMetadata.canonicalUrl}${location.pathname}`
+  const disqusConfig = {
+    url: shareUrl,
+    identifier: frontmatter.slug,
+    title: frontmatter.title,
+  }
 
   const shareImageUrl = `${data.site.siteMetadata.canonicalUrl}${frontmatter.banner.childImageSharp.social.src}`
   useEffect(() => {
@@ -386,6 +392,7 @@ export default function Post({ data }) {
               </>
             )}
           </Location>
+          <Disqus config={disqusConfig} />
         </PageContainer>
       </MDXProvider>
     </>

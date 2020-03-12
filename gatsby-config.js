@@ -121,5 +121,11 @@ module.exports = {
         anonymize: true,
       },
     },
+    {
+      resolve: `gatsby-plugin-disqus`,
+      options: {
+        shortname: `baoshishu-blog`,
+      },
+    },
   ],
 }
