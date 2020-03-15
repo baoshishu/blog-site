@@ -145,7 +145,7 @@ const Article = styled.article`
   }
 
   h4 {
-    font-size: 20;
+    font-size: 18;
     font-weight: 500;
     color: lighter;
     margin: 4 0 2;
