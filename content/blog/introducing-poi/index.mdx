@@ -141,8 +141,8 @@ rows = [Row(
     children=[
 -        Cell(row[0]),
 -        Cell(row[1], colspan=2),
-+        Cell(row[0], colspan=2),
-+        Cell(row[1]),
++        Cell(row[1], colspan=2),
++        Cell(row[0]),
     ]
 ) for row in expenses + total]
 ```
