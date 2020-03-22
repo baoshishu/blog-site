@@ -109,7 +109,7 @@ total = (["Total", sum(r[1] for r in expenses)],)
 
 rows = [Row(children=[Cell(row[0]), Cell(row[1]),]) for row in expenses + total]
 
-sheet = Sheet(root=[*rows,])
+sheet = Sheet(root=rows)
 
 sheet.write("Expenses01.xlsx")
 
@@ -141,7 +141,7 @@ rows = [Row(
     children=[
 -        Cell(row[0]),
 -        Cell(row[1], colspan=2),
-+        Cell(row[1], colspan=2),
++        Cell(row[0], colspan=2),
 +        Cell(row[1]),
     ]
 ) for row in expenses + total]
