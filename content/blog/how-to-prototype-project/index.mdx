@@ -1,0 +1,85 @@
+---
+slug: "how-to-prototype-project"
+title: "如何搭建你的产品原型项目"
+date: "2020-03-23"
+author: "Gary Gu"
+published: true
+description: ""
+categories:
+  - "Prototype"
+  - "Product"
+banner: "./images/banner.png"
+bannerCredit: ""
+---
+
+在这篇文章里，我们不讨论产品设计的具体细节，只是总结我们团队在搭建产品原型项目中使用的工具和平台。每个产品工程师都有自己熟悉和擅长的工具集和实现方式。如果您使用不同的产品原型设计工具，也可以分享给我们。
+
+#### 概要
+
+- 使用[Axure RP](https://www.axure.com/)进行产品原型设计，并使用 Axure Cloud 进行团队协作。
+
+- 使用[CODING]([CODING - 一站式软件研发管理平台](https://coding.net/))存放原型 HTML 文件，并使用其部署静态网站。
+
+- 使用 Git 工具[Github Desktop](https://desktop.github.com/)实现 Axure 自动生成的原型 HTML 代码的管理。
+
+- 协作过程中的，各个环节的一些小技巧。
+
+#### Axure RP（产品原型设计工具）
+
+![](https://www.axure.com/wp-content/webp-express/webp-images/doc-root/wp-content/uploads/fly-images/1751/Group-13@2x-1828x1402.png.webp)
+
+很多产品经理会使用[Axure RP]([Axure RP 9 - Prototypes, Specifications, and Diagrams in One Tool](https://www.axure.com/))作为制作原型的工具。Axure 强大的可视化模版功能可以让你制作逼真的产品界面和交互流程。Axure 工具如何制作产品原型不是本文的重点。多看看别人共享的原型文件，或者自己多加揣摩，就能理解 Axure 各类原型组件的用法。
+
+##### Team Project - Axure 的团队协作模式
+
+Axure RP 9.x 版本不支持使用第三方 SVN 平台进行原型文件的协作设计，只能使用 Axure Cloud 进行团队多人协作设计原型。只需注册免费的 Axure Cloud 帐号，就可以创建 Team Project，然后授权给团队成员。Axure 的文件使用 SVN 管理，任意原型页面只能一个人 check out 后编辑，需要在设计原型前按功能进行分工。
+
+- 注册[Axure Cloud](https://www.axure.cloud)帐号
+
+- 绑定 Axure Cloud 帐号到 Axure RP
+
+- 通过 Axure RP 创建 Team Project 到 Axure Cloud 指定的目录
+
+- 通过 Axure Cloud 将目录共享给团队成员的帐号
+
+##### 生成 HTML 文件
+
+Axure RP 可以将产品原型生成可浏览的 HTML 文件。通过共享 HTML 文件，可以展示给参与产品定义和实现的人员。
+
+#### CODING（产品原型展示平台）
+
+![](https://assets.codehub.cn/images/code.7f5e67e6.png)
+
+CODING 是腾讯云旗下的研发协作平台，核心功能是代码托管和开发管理。在搭建产品原型项目时，我们要使用 CODING 的代码管理和静态网站功能。
+
+##### 代码管理
+
+产品原型的代码基本上是 HTML 相关的一些文件，包括 CSS、JS、图片等类型。代码管理的目的是让多个产品工程师可以及时获取最新的产品原型代码，并上传自己修改后的最新代码。通过 CODING 就可以在多人间共享这些代码文件。在使用 CODING 之前，你需要了解 GIT 软件，并掌握其最基础的、常规的操作。
+
+##### 静态网站
+
+CODING 提供静态网站构建和部署的功能。通过部署静态网站，团队的任何成员都可以在线浏览产品最新的原型设计，及时给出反馈。这对产品评审和调整都很有帮助，特别是远程协作的开发团队。
+
+**自定义域名**
+
+为了团队的效率，可以使用固定域名来绑定 CODING 提供的静态网站入口。CODING 为每个静态网站都提供了「自定义域名」服务，并且为每个自定义域名申请了 HTTPS。只需将域名解析的 CNAME 指向 CODING 静态网站的 URL，在 CODING 的「自定义域名」服务上完成绑定即可。
+
+#### 从 Axure RP 发布到 CODING
+
+##### Github Desktop
+
+![Screenshot of GitHub Desktop running on macOS](https://desktop.github.com/images/github-desktop-screenshot-mac.png)
+
+Github Desktop 是个很好用的 git 图形界面工具，满足了技术小白的产品工程师进行代码协作的全部需求。当然，在代码协作流程上，尽量按步骤进行常规操作，否则产生代码冲突，处理起来比较费事。以下操作原则，可以帮你规避大多数产生代码冲突的可能：
+
+> 先使用 Github Desktop 获取项目的最新代码；
+>
+> 再使用 Axure 生成项目最新的 HTML 文件目录；
+>
+> 最后使用 Github Desktop 提交并推送最新的项目代码。
+
+#### 总结
+
+这是报时树产品团队日常制作产品原型的工具链。我们用起来很顺手，团队也很适应这种原型展现方式。
+
+最后，放个产品原型实例，算是彩蛋。点击[链接](https://eleme.baoshishu.cn)打开彩蛋。
