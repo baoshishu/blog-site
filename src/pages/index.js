@@ -28,7 +28,7 @@ export default function IndexPage({ data }) {
 export const pageQuery = graphql`
   query($langKey: String!) {
     allMdx(
-      limit: 5
+      limit: 20
       sort: { fields: [frontmatter___date], order: DESC }
       filter: {
         frontmatter: { published: { ne: false } }
