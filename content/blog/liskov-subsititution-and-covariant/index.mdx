@@ -1,0 +1,269 @@
+---
+slug: "liskov-substitution-and-covariant"
+title: "Liskov 替换原则、泛型和 协变"
+date: "2020-03-26"
+author: "Ryan Wang"
+published: false
+description: ""
+categories:
+  - "Python"
+banner: "./images/banner.jpg"
+bannerCredit: ""
+---
+
+面向对象的程序设计有所谓的 SOLID 原则。
+
+- **S**ingle-responsibility principle 单一职责
+- **O**pen-closed principle 开闭原则
+- **L**iskov substituion principle Liskov 替换原则
+- **I**nterface segratation principle 接口分离原则
+- **D**ependency inversion principle 依赖反转原则
+
+在系统设计里面，合理的利用 SOLID 原则可以帮助我们提高系统的维护性，灵活性和正确性。
+
+今天我们就来谈一下 **Liskov 替换原则**(一下简称 LSP)。 今天的话题可能稍微有点复杂，你不妨先泡一杯咖啡。
+
+> The Liskov Substituion Principle states that Subtypes must be substitutable for their base types.
+
+LSP 说的是：如果类型 S 是类型 T 的子类， 那么在一个需要类型 T 的对象的地方，我们可以用一个类型为 S 的对象替换，
+替换以后程序的行为不应该发生异常或错误。乍看似乎有点抽象，不过我们用一个简单的例子来说明。
+
+**\*正确性**
+
+1. client 接受用子类替换父类
+
+1) 子类不要去除父类的功能和行为
+1) 程序依赖接口而非实现，因为可替换性
+1) 遍历的时候不需要再通过类型判断来调用对应的子类的方法 smell
+
+```python
+for i in employess:
+    if isinstance(i, Manager):
+        manager_salary(i)
+    if isintace(i, Employee)
+        employee_salary(i)
+
+```
+
+1. 子类不实现接口的方法 ,违背 LSP, 解决方法 Interface segratation principle
+
+```python
+class Base:
+   def m():...
+
+class Child(Base):
+   def m():
+       raise NotImpelment
+
+```
+
+子类方法签名和父类不一致
+
+Invariant 不变性，相当于 Spec 规定
+
+Rectangle 和 Square 都有 width 和 height， Squre 修改 width 的同时也修改了 height，就违背了 LSP, 说明两者不具有可替换性(只修改长度或者只修改宽度), 更好的设计 Square 不是 Rectangle 的子类(看怎么定义场景, 上款是否可以单独变化而互不影响）? 或者不可变(正方形是特殊的长方形应该成立, 只是不能修改)？或者？, 因为行为发生了改变, 解决办法：都继承 Shape 类,实现 area 方法, 同时满足了开闭原则
+
+```python
+class Shape:
+   pass
+
+class Rect(Shape):
+   width
+   height
+   def area():...
+
+class Square(Shape):
+    side_length
+   def area():...
+
+```
+
+```python
+class Food:
+  def __init__(self, name):
+      self.name = name
+
+class Rock:
+  pass
+
+class Animal:
+
+    def eat(self):
+      return Food('anything')
+
+class Dog(Animal)
+  def eat(self):
+      return Rock()
+
+
+def feed(animal: Animal)->Food:
+    return animal.eat()
+```
+
+以上的设计就违背了 LSP：Animal _eat_ 返回 Food 食物，如果遵循 LSP, Dog 的 _eat_ 也应该返回 Food， 但是 Dog 的 eat 方法返回的 Rock。虽然 Dog 继承了 Animal，但是我们如果把一个 Dog 对象传给 feed 方法，就不能达到期望的效果，因为违反了 LSP，我们的系统就回出现 **给狗喂食，狗却吃了一块石头** 这种荒谬的错误。纠正这个错误，只需要让 Dog 的 eat 方法也返回 Food.
+
+```python
+class Dog(Animal)
+  def eat(self):
+      return Fod('bone')
+```
+
+LSP 不一定是通过继承，也可以通过 duck typing
+duck type
+
+LSP 和 泛型(Generics)
+
+如果 B 是 A 的子类，T[B] 和 T[A] 肯能有 3 种关系
+
+1. T[B] 是 T[A] 的子类
+1. T[B] 是 T[A] 的子类
+1. T[B] 既不是 T[A] 的子类, 也不是 T[A] 的夫类
+
+```python
+class A:
+    pass
+
+
+class B(A):
+    pass
+
+class C(A):
+    pass
+
+
+lb: List[B] = []
+
+la: List[A] = lb
+```
+
+如果 lb 可以赋给 la， 那么
+
+```python
+la.append(C())
+```
+
+lb:list[B] 包含了 c， 但是 c 不是 B 的子类，
+如果 List[B] 是 List[A] 的子类, 遵循 LSP 原则，因为 C 是 A 的子类 la.append(C())成立 ，但是这显然造成了错误，，反证了
+
+我们来证明 List[B]不是 List[A] 的子类
+
+proof:
+
+假设 List[B] 是 List[A] 的子类，lb 可以赋给 la 因为 C 是 A 的子类 la.append(C())成立, lb 中就包含了 C，
+然而 C 不是 B 的子类，这样就造成了明显的逻辑错误，得证 List[B] 不是 List[A] 的子类,
+
+我们知道 List 是 invariant 的 (mypy 截图)
+
+那么什么泛型 T，T[B] 是 T[A] 的子类呢， 对， Tuple.
+
+```python
+class A:
+    pass
+
+
+class B(A):
+    pass
+
+class C(A):
+    pass
+
+
+lb: Tuple[B] = (B(), )
+
+la: Tuple[A] = lb
+
+```
+
+因为遵循了 LSP，
+
+因为 Tuple 是 immutable 的， 把 lb 赋值给 la 后，不能再修改 la 的元素（比如 la.append(C()), 在一个需要 Tuple[A]的地方使用 Tuple[B] 是安全的，不会引发逻辑错误。
+
+这种情况称之为 covariant
+
+不禁会问，有没有一种情况，如果 T[A]是 T[B] 的子类呢？ 还真有一种泛型叫做**contravariant**
+
+Python 又一个类型叫做 Callable 就是 contravariant 的
+
+```python
+class Virus:
+    pass
+
+class COVID:
+    pass
+
+
+class COVID19(COVID):
+    pass
+
+
+
+def cure(virus: COVID, infect_ability: Callable[[COVID], int]):
+    return infect_ability(virus)
+
+
+def virus_infect_ability(virus: Virus) -> int:
+    return 100
+
+
+def covid19_infect_ability(virus: COVID19) -> int:
+    return 100
+
+
+cvirus = COVID()
+
+cure(cvirus, virus_infect_ability) ## ok
+
+cure(cvirus, covid19_infect_ability) ## error
+```
+
+infect_ability（感染能力) 函数的签名是 Callable[[COVID], int], 我们来证明 Callable 是 contravariant 的，
+
+如果 Callable[[COVID], int] 是 covariant
+
+COVID19 是 COVID 的子类， 那么 Callable[[COVID19], int] 也应该是 Callable[[COVID], int] 的子类,
+covid19_infect_ability 可以作为 infect_ability 的值传给 cure，但是 cure 的 virus 参数是 COVID, 那么
+调用 covid19_infect_ability 的时候，就把类型为 COVID 的值传给了 covid19_infect_ability 的 virus 参数，
+但是 covid19_infect_ability 的签名，virus 必须是 COVID19, 显然 COVID(冠状病毒) 不一定是他的变种 COVID19(新冠病毒), 也可能是 SARS。这就引发了逻辑错误。违背了 LSP 原则.
+
+如果 Callable[[COVID], int] 是 invariant,
+
+Callable[[COVID], int] 不是 Callable[[Virus], int] 的子类, virus_infect_ability 不能作为 infect_ability 的值，但是 virus_infect_ability 却可以接受 COVID 参数, 比如
+
+```python
+def virus_infect_ability(virus: Virus) -> int:
+    if isinstance(virus, COVID):
+          return 300
+    return 100
+```
+
+遵循了 LSP 原则， 并不会引起错误。可见 Callable 也不是 invariant 的, Callable[[COVID], int] 是 Callable[[Virus], int] 的子类
+
+遵循 LSP ，Y 的 a 方法应该是 X 的 a 方法的子类
+
+所有 X 能做的事情，Y 也能做，
+
+1. Y 有 X 的所有方法
+2. Y 的所有方法都是 X 对应方法的子类
+
+```python
+
+
+class X:
+    def a(self, a:D)->A:
+        pass
+
+class Y(X):
+    def a(self, a:C)->B:
+        pass
+
+```
+
+我们还可以继续推导，如果 B 是 A 的子类，D 是 C 的子类, F 是 E 的子类, 如果遵循 LSP 可以知道 Callable[[A, C], F] 是 Callable[[B, D],E] 的子类。即和函数参数类型反相关，和返回结果类型正相关。
+
+自定义泛型的 variance T_co = TypeVar('T_co', covariant=True), 需要根据具体的行为来保证没有违背 LSP
+
+## 总结
+
+LSP 原则 保障了程序的正确性，泛型的设计佐证了 LSP 原则的必要性 x xiao
+
+## 看看别人怎么说

@@ -5,7 +5,7 @@ import MDXRenderer from "gatsby-plugin-mdx/mdx-renderer"
 import Img from "gatsby-image"
 import { MDXProvider } from "@mdx-js/react"
 import Markdown from "react-markdown"
-import { Disqus, CommentCount } from "gatsby-plugin-disqus"
+import { Disqus } from "gatsby-plugin-disqus"
 
 import { Location, useLocation } from "@reach/router"
 import { useLangKey } from "../components/I18nContext"
@@ -13,6 +13,7 @@ import { PageContainer } from "../components/Container"
 import { Code } from "../components/Code"
 // import { Share } from "../components/Share"
 import { Seo } from "../containers/Seo"
+import Newsletter from "../components/Newsletter"
 // import wx from "../static/weixin"
 
 export function formatReadingTime(minutes) {
@@ -392,6 +393,7 @@ export default function Post({ data }) {
               </>
             )}
           </Location>
+          <Newsletter />
           <Disqus config={disqusConfig} />
         </PageContainer>
       </MDXProvider>
