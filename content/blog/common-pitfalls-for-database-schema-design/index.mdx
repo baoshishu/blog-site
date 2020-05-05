@@ -1,0 +1,355 @@
+---
+slug: "common-pitfalls-for-database-schema-design"
+title: "数据库表设计的一些思考"
+date: "2020-05-05"
+author: "Ryan Wang"
+published: true
+description: ""
+categories:
+  - "Python"
+  - "Database"
+banner: "./images/banner.jpg"
+bannerCredit: ""
+---
+
+后端开发每天都要和数据库打交道。只要有新的产品需求，我们第一步要做的事情就是「需求建模」,往往也意味着设计新的数据库表结构。我们知道数据库的操作基本上也就是所谓的 _CRUD_, 业务开发中我们一般会使用 _ORM_ 来把数据库表映射到业务的 Model，这样做的好处是大大提高了开发效率——让开发者的思维模式更多的面向产品需求, 同时避免了直接写 SQL 查询(效率低而且容易出错)。但是随着产品的迭代，我们也发现随之而来产生了不少问题。作为后端开发者，使用 ORM 的同时必须对数据库的操作要有足够的了解，应该清楚的知道你的 ORM 查询对应的 SQL 语句是什么,
+
+## TLDR
+
+- 不要添加可以根据其他字段推导出来的字段
+- 积极使用数据库约束来避免业务数据的错乱
+- 适当的时候用 SQL 进行数据的计算，不要把所有计算都放到业务中
+- 不要给一个表添加太多字段，适当的时候把业务抽到新的表去
+- 定义 JSON 类型的 Schema
+- 区分 **Business Model** 和 **ORM Model**
+- 不要把产品的需求直接映射到数据库表的设计
+
+## 避免无意义的字段
+
+假设我们有一个报名活动表
+
+```sql
+CREATE TABLE activity (
+  id int(11) primary key AUTO_INCREMENT,
+  name varchar(50) NOT NULL,
+  total_number int(11)  COMMENT '可报名人数',
+  participate_number int(11) COMMENT '已报名人数',
+  left_number int(11) COMMENT '剩余可报名人数'
+  );
+
+  INSERT INTO activity (name, total_number, participate_number, left_number) VALUES
+  ('first', 10, 5, 5),
+  ('second', 20, 8, 12),
+  ('third', 30, 14, 16);
+
+```
+
+这里的问题是`left_number` 可以根据 `total_number`和`participate_number` 计算出来, 再存一个字段除了浪费空间之外还带来了同步的麻烦。如果更改数据的时候忘记了同步`left_number`的数据，就会造成数据的不一致。我们可以果断去掉这个字段：
+
+```sql
+ALTER TABLE ACTIVITY DROP COLUMN left_number;
+```
+
+这并不妨碍我们获取`left_number`。 如果要查询剩余可报名人数小于 10 的活动, 只需要:
+
+```sql
+SELECT (id, name, total_number-participate_number as left_number) from activity where total_number-participate_number < 10;
+```
+
+## 合理利用数据库约束
+
+我们知道 `total_number` 和 `participate_number` 都不可能是 NULL, 那么最好在设计表的时候就加上非空约束; 我们认为活动名称不能重复，那么给`name`加上唯一约束也是一个不错的选择，
+
+```sql
+CREATE TABLE activity (
+  id int(11) primary key AUTO_INCREMENT,
+  name varchar(50) UNIQUE NOT NULL,
+  total_number int(11) NOT NULL  COMMENT '可报名人数',
+  participate_number int(11) NOT NULL COMMENT '已报名人数',
+  );
+```
+
+数据库约束可以在开发者忘记或者忽略掉数据检查的时候起到最后一道防线的作用，避免了业务数据的错乱（同名的活动，报名人数为空）。
+
+## 学会使用 SQL 进行计算
+
+假设我们需要对一个集团公司员工的工资进行统计，工资包括固定薪酬 Salary, 补贴 Subsidy，另外员工需要交税 Tax, 员工的收入可以通过公示 `Income = Salary + Subsidy - Tax` 计算得出。
+
+需求如下：
+
+1. 需要知道每个员工的 salary, subsidy, tax, income
+1. 需要知道每个部门所有员工 salary, subsidy, tax, income 的平均值，最大值和总和
+1. 需要知道集团各个公司所有员工 salary, subsidy, tax, income 的平均值，最大值和总和
+1. 需要知道集团所有员工 salary, subsidy, tax, income 的平均值，最大值和总和
+
+如果我们知道了每个员工的工资详情，只需要知道各个员工所在部门，就可以通过 SQL 直接计算出来，而不需要把所有员工的数据都取出，然后在业务里面进行计算, 更不需要额外的 table 来存储部门和公司的整体薪水信息，因为这些数据都是可以从员工的工资表推演出来.下面是表的设计和模拟数据：
+
+```sql
+CREATE TABLE company (id int(11) primary key AUTO_INCREMENT, name varchar(50) NOT NULL);
+CREATE TABLE depart (
+  id int(11) primary key AUTO_INCREMENT,
+  name varchar(50) NOT NULL,
+  company_id int(11) NOT NULL REFERENCES company(id)
+  );
+
+CREATE TABLE staff (
+  id int(11) primary key AUTO_INCREMENT,
+  name varchar(50) NOT NULL,
+  depart_id int(11) NOT NULL REFERENCES depart(id),
+  salary DECIMAL(10, 2) NOT NULL,
+  subsidy DECIMAL(10, 2) NOT NULL,
+  tax DECIMAL(10, 2) NOT NULL
+  );
+
+INSERT INTO company (name) VALUES ("C1"), ("C2");
+
+INSERT INTO depart (name, company_id) VALUES ("D1", 1), ("D2", 1);
+INSERT INTO depart (name, company_id) VALUES ("D3", 2), ("D4", 2);
+
+INSERT INTO staff (name, depart_id, salary, subsidy, tax) VALUES
+("staff1", 1, 1000, 20,3),
+("staff2", 1, 300,40,45),
+("staff3", 2, 80, 20,35),
+("staff4", 2, 70,40,51),
+("staff5", 3, 300, 20,32),
+("staff6", 3, 500,40,53),
+("staff7", 4, 520, 20,31),
+("staff8", 4, 477,40,52);
+
+```
+
+如果需要查询所有员工薪水信息
+
+```sql
+SELECT name, salary, subsidy, tax, salary + subsidy - tax as income from staff;
+---
++--------+---------+---------+-------+---------+
+| name   | salary  | subsidy | tax   | income  |
++--------+---------+---------+-------+---------+
+| staff1 | 1000.00 |   20.00 |  3.00 | 1017.00 |
+| staff2 |  300.00 |   40.00 | 45.00 |  295.00 |
+| staff3 |   80.00 |   20.00 | 35.00 |   65.00 |
+| staff4 |   70.00 |   40.00 | 51.00 |   59.00 |
+| staff5 |  300.00 |   20.00 | 32.00 |  288.00 |
+| staff6 |  500.00 |   40.00 | 53.00 |  487.00 |
+| staff7 |  520.00 |   20.00 | 31.00 |  509.00 |
+| staff8 |  477.00 |   40.00 | 52.00 |  465.00 |
++--------+---------+---------+-------+---------+
+---
+```
+
+如果需要知道各个部门的薪资详情
+
+```sql
+SELECT depart.name,
+sum(staff.salary) as salary_total,
+max(staff.salary) as salary_max,
+avg(staff.salary) as salary_avg,
+sum(staff.subsidy) as subsidy_total,
+sum(staff.tax) as tax_total,
+sum(staff.salary + staff.subsidy - staff.tax) as income_total
+FROM staff JOIN depart
+ON staff.depart_id = depart.id GROUP BY depart_id;
+---
++------+--------------+------------+------------+---------------+-----------+--------------+
+| name | salary_total | salary_max | salary_avg | subsidy_total | tax_total | income_total |
++------+--------------+------------+------------+---------------+-----------+--------------+
+| D1   |      1300.00 |    1000.00 | 650.000000 |         60.00 |     48.00 |      1312.00 |
+| D2   |       150.00 |      80.00 |  75.000000 |         60.00 |     86.00 |       124.00 |
+| D3   |       800.00 |     500.00 | 400.000000 |         60.00 |     85.00 |       775.00 |
+| D4   |       997.00 |     520.00 | 498.500000 |         60.00 |     83.00 |       974.00 |
++------+--------------+------------+------------+---------------+-----------+--------------+
+---
+```
+
+如果需要知道各个公司的薪资详情, 只需要再 _JOIN_ company 表就行了，SQL 代码基本相同。
+
+```sql
+SELECT company.name,
+sum(staff.salary) as salary_total,
+max(staff.salary) as salary_max,
+avg(staff.salary) as salary_avg,
+sum(staff.subsidy) as subsidy_total,
+sum(staff.tax) as tax_total,
+sum(staff.salary + staff.subsidy - staff.tax) as income_total
+FROM staff JOIN depart
+ON staff.depart_id = depart.id JOIN company ON depart.company_id=company.id GROUP BY company_id;
+
+---
++------+--------------+------------+------------+---------------+-----------+--------------+
+| name | salary_total | salary_max | salary_avg | subsidy_total | tax_total | income_total |
++------+--------------+------------+------------+---------------+-----------+--------------+
+| C1   |      1450.00 |    1000.00 | 362.500000 |        120.00 |    134.00 |      1436.00 |
+| C2   |      1797.00 |     520.00 | 449.250000 |        120.00 |    168.00 |      1749.00 |
++------+--------------+------------+------------+---------------+-----------+--------------+
+---
+```
+
+从上面的例子看出，我们只需要在 staff 表中存储各个员工的薪资基础数据，就可用通过简单的 SQL 对部门和公司进行统计分析，通过 SQL 函数进行任意的数据组合, 我们的数据都是推算出来的，从根本上保证了数据的正确性。 后端开发者平常需要要有意识的进行手写 SQL 训练，不要觉得有了 ORM 就不需要关心 SQL 这一层了，那样的话在遇到需要 SQL 来解决问题的时候就只会手足无措。
+
+## 不要给一个表添加太多字段
+
+有时候我们会不停给一个表添加字段。假设我们有电商业务，那么商品表 product 就是典型例子:随着业务的推进，product 表经常会需要增加新的字段来配置新的信息。 最开始业务简单，只需要名称，价格，编号和库存:
+
+```sql
+create TABLE product (
+  id int(11) primary key AUTO_INCREMENT,
+  name varchar(50) NOT NULL,
+  price DECIMAL(10, 2) NOT NULL,
+  code varchar(50) NOT NULL,
+  stock int(11) NOT NULL,
+  created_at DATETIME NOT NULL DEFAULT now()
+)
+```
+
+随着用户增加，产品认为需要增加更多信息，比如商品的图片，原价, 描述等。没问题，我们可以直接加字段
+
+```sql
+ALTER TABLE product add column image varchar(255);
+ALTER TABLE product add column original_price DECIMAL(10, 2);
+ALTER TABLE product add column description varchar(255);
+```
+
+接着产品又觉得一张图片不够，需要多张图片，商品需要可以使用优惠券, 可以有促销活动等，按照之前的做法，我们可以继续往*product*表加字段。
+
+```sql
+ALTER TABLE product add column images JSON;
+ALTER TABLE product add column discount_id int(11) COMMENT "优惠券";
+ALTER TABLE product add column activity_id int(11) COMMENT "促销活动";
+```
+
+这样做可以立马解决问题，但是我们仔细思考，就会发现这种做法有几个不容忽视的问题。
+
+1. 如果每次有新的需求就加字段，product 表的字段就会越来越多
+1. 通过 ORM 查出的每行 product 的数据也会越来越庞大, 但是很多字段可能又是不需要的，造成资源的浪费
+1. product 对应的 Model 的字段(attribute)也会越来越多，造成代码维护上的困难
+1. product 表承载了太多的业务，违背了 SRP 原则
+
+更好的做法则是用新的表来承载新的业务，让新表关联 product 表
+
+```sql
+CREATE TABLE market_images (
+  id int(11) primary key AUTO_INCREMENT,
+  image_url varchar(255) NOT NULL,
+  product_id int(11) NOT NULL REFERENCES product(id)
+);
+
+CREATE TABLE product_activity (
+  id int(11) primary key AUTO_INCREMENT,
+  product_id int(11) NOT NULL REFERENCES product(id),
+  activity_id int(11)
+);
+
+CREATE TABLE product_discount (
+  id int(11) primary key AUTO_INCREMENT,
+  product_id int(11) NOT NULL REFERENCES product(id),
+  activity_id int(11)
+);
+```
+
+通过拆解，新的业务放进了新的表（market_images, product_activity, product_discount), 使得 product 表仍然保持了原先的简洁,坏处是每次都需要额外的查询来获取这些信息。实际业务中你可能需要根据具体情况做权衡来决定是否要采用这种策略。
+
+## 定义 JSON 类型的 Schema
+
+MySQL 和 PostgreSQL 都支持 JSON 类型，有时候我们会觉得把一些需要落地的数据直接存 JSON 字段会很方便。这没错，但请不要在业务中直接使用 JSON 字段返回的原始数据, 下面通过一个 SQLAlchemy 的例子说明。
+
+我们有订单的 Model 需要保存用户的地址, 用户地址包括（name, phone, longitude, latitude, city)
+
+```python
+class Order(Base):
+    id = Column(BigIntger, primary_key=True)
+    address = Column(JSON)
+
+address = {
+  "name": name,
+  "phone": phone,
+  "longitude": longitude,
+  "latitude": latitude,
+  "city": city
+}
+order = Order(address=address)
+```
+
+我们可以通过`order.address`得到一个 Didct 对象，里面包含具体地址，问题在于使用订单的业务需要清楚的记得这个 Didct 里面有哪些字段。而且即便知道了字段，拼写错误也可能导致访问不到数据而产生 KeyError。解决方法是通过 getter 和 setter 方法封装一个 Address Model 给业务使用。
+
+```python
+import dataclasses
+
+@dataclasses.dataclass
+class Address:
+    name: str
+    phone: str
+    longitude: float
+    latitude: float
+    city: str
+
+class Order(Base):
+    id = Column(BigIntger, primary_key=True)
+    _address = Column(JSON)
+
+    @property
+    def address(self)-> Address:
+        return Address(**self._address)
+
+    @address.setter
+    def address(sef, address:Address):
+        self._address = dataclass.asdict(address)
+```
+
+我们用 `dataclass` 实现了 `Address` 这个 Model, 通过传入一个 Address 对象来设置地址，返回一个 Address 对象来获取地址。用 `Address` 而不是 `Dict` 做边界，外部系统可以更好的理解 `order.address`, 编辑器和 IDE 也可以帮我们检查到拼写错误。
+
+```python
+order.address.mame
+## Cannot access member "mame" for type "Address"
+##  Member "mame" is unknown
+```
+
+同时我们隐藏了 address 的具体实现，意味着如果我们更换了 address 的存储方式，只需要对 `Order` 的 `address` 属性进行修改。
+
+## 区分 **Business Model** 和 **ORM Model**
+
+这里提出两个概念：_Business Model_ 和 _ORM Model_。 一般集成了 ORM 的 web 框架提供的都是 _ORM Model_, 比如 Django 会在我们的项目里面建一个 _models.py_ 文件来存放所有的 _ORM Model_。几乎所有 web 框架的 API 开发教程都在教我们如何把 REST API 对应到 Model 的 _CRUD_ 操作上面去。
+
+为什么要引入 _Business Model_ 呢？因为真实的世界并不像入门教程那么简单，实际业务的可能需要多个 Model 之间的沟通协作，产品所说的 Product 和我们数据库的 Product 表并不是简单的对应关系，很多时候还需要开发者去做**translation**的工作。 区分 _Business Model_ 和 _ORM Model_ 的意义就在于增加一层抽象，避免业务模型和数据模型的高度耦合。
+
+如果你发现代码里面有下面这些 Code Smell， 你可能需要考虑抽象出对应的*Business Model*
+
+1. ORM Model 里面有大量的查询和修改方法, 即大量业务都在 Model 方法里面（也算违背了 SRP)
+1. ORM Model 里面引入了其他 Model 的方法甚至是 Service 层的方法（这往往会造成 circular import)
+1. 不同的 Model 之间互相依赖，这是一个需要一个*Business Model*来协调这些互相依赖的 Mode 的信号。
+
+抽象出*Business Model*的好处有
+
+1. 业务和数据库解耦，如果把数据库作为 implementation detail，后续的重构不需要修改业务层的代码
+1. 通过对*ORM Model*的封装，把一些复杂的查询抽到一个 namespace 里面统一维护
+1. 业务边界（Boundary）更加清晰，代码易于维护。
+1. 更利于编写测试，测试 _Business Model_ 比 _ORM Model_ 更有意义也更方便。
+
+_Business Model_ 可以是一个类（class）， 也可以是一个模块（module）。并不是说有了 _Business Modal_，我们就完全不能直接操作 _ORM Model_ 了，简单的 CRUD 操作往往也没有必要引入额外的 layer, 什么时候用 _Business Model_ 也没有金科玉律，需要根据具体业务场景做分析判断。
+
+引入 _Business Model_ 还有一个好处就是，如果已经存在一个比较庞大或者设计不太好的 _ORM Model_ 时，可以通过 _Business Model_ 把这些 **dirty** 的部分集中起来，暴露一个简单 API 给其他业务使用。这个时候 _Business Model_ 就相当与一个 [facade](https://en.wikipedia.org/wiki/Facade)。
+
+## 不要把产品的需求直接映射到数据库表的字段
+
+对，不要认为产品说的字段跟你说的字段是同一个东西，开发者有义务自己完成 _product field_ 到 _table field_ 的翻译。也就是说，产品和开发对业务的理解往往是有区别的，开发应该尽量尊重产品对业务的解释，如果觉得产品对业务的理解跟自己不太一样，并且不能说服对方改变，最好的做法不是互撕，而是想办法在代码层面抹平这层差异。
+
+比如之前的 activity 表， 产品认为报名活动有未开始，已经开始，已结束（NOT_STARTED，STARTED，FINISHED）三个状态，已报名人数等于活动总人数的活动也算结束, 用户可以根据状态对活动进行过滤。 经过分析，这三个状态都从已有数据中推导出来，我们认为数据库其实不需要有状态这个字段。
+
+```sql
+ALTER TABLE activity add column begin_at DATETIME COMMENT '开始时间';
+ALTER TABLE activity add column end_at DATETIME COMMENT '结束时间';
+```
+
+对未开始，已开始，已结束的活动进行查询:
+
+```sql
+SELECT * from activity where now() < begin_at;
+SELECT * from activity where begin_at < now() < end_at AND participate_number < total_number;
+SELECT * from activity where now() > end_at OR participate_number = total_number;
+```
+
+我们可以在 API 定义 status 字段返回给前端，但是 status 的实现方式则完全由自己把控。如果强行在数据库定义 status 字段，还需要解决状态随时间同步的问题， 同时带来了潜在的数据不一致隐患。
+
+Anyway:
+
+> 产品不要教后端设计数据库，后端也不要教产品理解业务。

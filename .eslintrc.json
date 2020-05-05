@@ -1,6 +1,5 @@
 {
-  "root": true,
-  "extends": ["smooth", "smooth/project", "smooth/browser", "smooth/react"],
+  "extends": ["react-app"],
   "globals": {
     "wx": true
   }

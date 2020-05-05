@@ -190,10 +190,10 @@ const Article = styled.article`
   }
 
   blockquote {
-    margin: 6 3;
+    margin: 5 3;
     text-align: center;
-    font-size: 28;
-    line-height: 38rpx;
+    font-size: 24;
+    line-height: 30rpx;
     font-style: italic;
     quotes: "“" "”";
   }

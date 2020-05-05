@@ -1,18 +1,18 @@
-import React from 'react'
+import React from "react"
 import styled, {
   css,
   ThemeContext,
   useColorMode,
   up,
-} from '@xstyled/styled-components'
-import Highlight, { defaultProps } from 'prism-react-renderer'
-import getPrismTheme from './prismTheme'
+} from "@xstyled/styled-components"
+import Highlight, { defaultProps } from "prism-react-renderer"
+import getPrismTheme from "./prismTheme"
 
 const Editor = styled.div`
   background-color: light800;
   color: light100;
   padding: 3 4;
-  margin: 5 -4;
+  margin: 3 -4;
   overflow: auto;
   font-size: 16;
   line-height: 1.4;
@@ -23,15 +23,15 @@ const Editor = styled.div`
   }
 
   ${up(
-    'sm',
+    "sm",
     css`
       border-radius: 3;
-    `,
+    `
   )}
 `
 
 const globalModules = {
-  react: 'React',
+  react: "React",
 }
 
 export function LiveConfig({ modules }) {
@@ -45,7 +45,7 @@ export function usePrismTheme() {
   return getPrismTheme({ theme, mode })
 }
 
-export function Code({ children, lang = 'markup' }) {
+export function Code({ children, lang = "markup" }) {
   const prismTheme = usePrismTheme()
   return (
     <Editor>
