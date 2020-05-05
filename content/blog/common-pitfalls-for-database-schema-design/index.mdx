@@ -44,13 +44,13 @@ CREATE TABLE activity (
 
 ```
 
-这里的问题是`left_number` 可以根据 `total_number`和`participate_number` 计算出来, 再存一个字段除了浪费空间之外还带来了同步的麻烦。如果更改数据的时候忘记了同步`left_number`的数据，就会造成数据的不一致。我们可以果断去掉这个字段：
+这里的问题是 left_number 可以根据 total_number 和 participate_number 计算出来, 再存一个字段除了浪费空间之外还带来了同步的麻烦。如果更改数据的时候忘记了同步 left_number 的数据，就会造成数据的不一致。我们可以果断去掉这个字段：
 
 ```sql
 ALTER TABLE ACTIVITY DROP COLUMN left_number;
 ```
 
-这并不妨碍我们获取`left_number`。 如果要查询剩余可报名人数小于 10 的活动, 只需要:
+这并不妨碍我们获取 left_number。 如果要查询剩余可报名人数小于 10 的活动, 只需要:
 
 ```sql
 SELECT (id, name, total_number-participate_number as left_number) from activity where total_number-participate_number < 10;
@@ -58,7 +58,7 @@ SELECT (id, name, total_number-participate_number as left_number) from activity 
 
 ## 合理利用数据库约束
 
-我们知道 `total_number` 和 `participate_number` 都不可能是 NULL, 那么最好在设计表的时候就加上非空约束; 我们认为活动名称不能重复，那么给`name`加上唯一约束也是一个不错的选择，
+我们知道 total*number 和 participate_number 都不可能是 NULL, 那么最好在设计表的时候就加上非空约束; 我们认为活动名称不能重复，那么给 \_name* 加上唯一约束也是一个不错的选择，
 
 ```sql
 CREATE TABLE activity (
@@ -73,7 +73,7 @@ CREATE TABLE activity (
 
 ## 学会使用 SQL 进行计算
 
-假设我们需要对一个集团公司员工的工资进行统计，工资包括固定薪酬 Salary, 补贴 Subsidy，另外员工需要交税 Tax, 员工的收入可以通过公示 `Income = Salary + Subsidy - Tax` 计算得出。
+假设我们需要对一个集团公司员工的工资进行统计，工资包括固定薪酬 Salary, 补贴 Subsidy，另外员工需要交税 Tax, 员工的收入可以通过公式 `Income = Salary + Subsidy - Tax` 计算得出。
 
 需求如下：
 
@@ -210,7 +210,7 @@ ALTER TABLE product add column original_price DECIMAL(10, 2);
 ALTER TABLE product add column description varchar(255);
 ```
 
-接着产品又觉得一张图片不够，需要多张图片，商品需要可以使用优惠券, 可以有促销活动等，按照之前的做法，我们可以继续往*product*表加字段。
+接着产品又觉得一张图片不够，需要多张图片，商品需要可以使用优惠券, 可以有促销活动等，按照之前的做法，我们可以继续往 product 表加字段。
 
 ```sql
 ALTER TABLE product add column images JSON;
@@ -270,7 +270,7 @@ address = {
 order = Order(address=address)
 ```
 
-我们可以通过`order.address`得到一个 Didct 对象，里面包含具体地址，问题在于使用订单的业务需要清楚的记得这个 Didct 里面有哪些字段。而且即便知道了字段，拼写错误也可能导致访问不到数据而产生 KeyError。解决方法是通过 getter 和 setter 方法封装一个 Address Model 给业务使用。
+我们可以通过 `order.address` 得到一个 Didct 对象，里面包含具体地址，问题在于使用订单的业务需要清楚的记得这个 Didct 里面有哪些字段。而且即便知道了字段，拼写错误也可能导致访问不到数据而产生 KeyError。解决方法是通过 getter 和 setter 方法封装一个 Address Model 给业务使用。
 
 ```python
 import dataclasses
@@ -310,18 +310,18 @@ order.address.mame
 
 这里提出两个概念：_Business Model_ 和 _ORM Model_。 一般集成了 ORM 的 web 框架提供的都是 _ORM Model_, 比如 Django 会在我们的项目里面建一个 _models.py_ 文件来存放所有的 _ORM Model_。几乎所有 web 框架的 API 开发教程都在教我们如何把 REST API 对应到 Model 的 _CRUD_ 操作上面去。
 
-为什么要引入 _Business Model_ 呢？因为真实的世界并不像入门教程那么简单，实际业务的可能需要多个 Model 之间的沟通协作，产品所说的 Product 和我们数据库的 Product 表并不是简单的对应关系，很多时候还需要开发者去做**translation**的工作。 区分 _Business Model_ 和 _ORM Model_ 的意义就在于增加一层抽象，避免业务模型和数据模型的高度耦合。
+为什么要引入 _Business Model_ 呢？因为真实的世界并不像入门教程那么简单，实际业务的可能需要多个 Model 之间的沟通协作，产品所说的 Product 和我们数据库的 Product 表并不是简单的对应关系，很多时候还需要开发者去做**translation** 的工作。 区分 _Business Model_ 和 _ORM Model_ 的意义就在于增加一层抽象，避免业务模型和数据模型的高度耦合。
 
-如果你发现代码里面有下面这些 Code Smell， 你可能需要考虑抽象出对应的*Business Model*
+如果你发现代码里面有下面这些 Code Smell， 你可能需要考虑抽象出对应的 _Business Model_
 
 1. ORM Model 里面有大量的查询和修改方法, 即大量业务都在 Model 方法里面（也算违背了 SRP)
 1. ORM Model 里面引入了其他 Model 的方法甚至是 Service 层的方法（这往往会造成 circular import)
-1. 不同的 Model 之间互相依赖，这是一个需要一个*Business Model*来协调这些互相依赖的 Mode 的信号。
+1. 不同的 Model 之间互相依赖，这是一个需要一个 _Business Model_ 来协调这些互相依赖的 Model 的信号。
 
-抽象出*Business Model*的好处有
+抽象出 _Business Model_ 的好处有
 
 1. 业务和数据库解耦，如果把数据库作为 implementation detail，后续的重构不需要修改业务层的代码
-1. 通过对*ORM Model*的封装，把一些复杂的查询抽到一个 namespace 里面统一维护
+1. 通过对 _ORM Model_ 的封装，把一些复杂的查询抽到一个 namespace 里面统一维护
 1. 业务边界（Boundary）更加清晰，代码易于维护。
 1. 更利于编写测试，测试 _Business Model_ 比 _ORM Model_ 更有意义也更方便。
 
