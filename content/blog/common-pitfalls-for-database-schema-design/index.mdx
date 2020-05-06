@@ -293,7 +293,7 @@ class Order(Base):
 
     @address.setter
     def address(sef, address:Address):
-        self._address = dataclass.asdict(address)
+        self._address = dataclasses.asdict(address)
 ```
 
 我们用 `dataclass` 实现了 `Address` 这个 Model, 通过传入一个 Address 对象来设置地址，返回一个 Address 对象来获取地址。用 `Address` 而不是 `Dict` 做边界，外部系统可以更好的理解 `order.address`, 编辑器和 IDE 也可以帮我们检查到拼写错误。
