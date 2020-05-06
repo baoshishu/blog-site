@@ -270,7 +270,7 @@ address = {
 order = Order(address=address)
 ```
 
-我们可以通过 `order.address` 得到一个 Didct 对象，里面包含具体地址，问题在于使用订单的业务需要清楚的记得这个 Didct 里面有哪些字段。而且即便知道了字段，拼写错误也可能导致访问不到数据而产生 KeyError。解决方法是通过 getter 和 setter 方法封装一个 Address Model 给业务使用。
+我们可以通过 `order.address` 得到一个 Dict 对象，里面包含具体地址，问题在于使用订单的业务需要清楚的记得这个 Dict 里面有哪些字段。而且即便知道了字段，拼写错误也可能导致访问不到数据而产生 KeyError。解决方法是通过 getter 和 setter 方法封装一个 Address Model 给业务使用。
 
 ```python
 import dataclasses
