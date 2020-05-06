@@ -12,7 +12,7 @@ banner: "./images/banner.jpg"
 bannerCredit: ""
 ---
 
-后端开发每天都要和数据库打交道。只要有新的产品需求，我们第一步要做的事情就是「需求建模」,往往也意味着设计新的数据库表结构。我们知道数据库的操作基本上也就是所谓的 _CRUD_, 业务开发中我们一般会使用 _ORM_ 来把数据库表映射到业务的 Model，这样做的好处是大大提高了开发效率——让开发者的思维模式更多的面向产品需求, 同时避免了直接写 SQL 查询(效率低而且容易出错)。但是随着产品的迭代，我们也发现随之而来产生了不少问题。作为后端开发者，使用 ORM 的同时必须对数据库的操作要有足够的了解，应该清楚的知道你的 ORM 查询对应的 SQL 语句是什么,
+后端开发每天都要和数据库打交道。只要有新的产品需求，我们第一步要做的事情就是「需求建模」,往往也意味着设计新的数据库表结构。我们知道数据库的操作基本上也就是所谓的 _CRUD_, 业务开发中我们一般会使用 _ORM_ 来把数据库表映射到业务的 Model，这样做的好处是大大提高了开发效率——让开发者的思维模式更多的面向产品需求, 同时避免了直接写 SQL 查询(效率低而且容易出错)。但是随着产品的迭代，我们也发现随之而来产生了不少问题。作为后端开发者，使用 ORM 的同时必须对数据库的操作要有足够的了解，应该清楚的知道你的 ORM 查询对应的 SQL 语句是什么。
 
 ## TLDR
 
@@ -30,7 +30,7 @@ bannerCredit: ""
 
 ```sql
 CREATE TABLE activity (
-  id int(11) primary key AUTO_INCREMENT,
+  id int(11) PRIMARY KEY AUTO_INCREMENT,
   name varchar(50) NOT NULL,
   total_number int(11)  COMMENT '可报名人数',
   participate_number int(11) COMMENT '已报名人数',
@@ -53,16 +53,16 @@ ALTER TABLE ACTIVITY DROP COLUMN left_number;
 这并不妨碍我们获取 left_number。 如果要查询剩余可报名人数小于 10 的活动, 只需要:
 
 ```sql
-SELECT (id, name, total_number-participate_number as left_number) from activity where total_number-participate_number < 10;
+SELECT (id, name, total_number - participate_number AS left_number) FROM activity WHERE total_number - participate_number < 10;
 ```
 
 ## 合理利用数据库约束
 
-我们知道 total*number 和 participate_number 都不可能是 NULL, 那么最好在设计表的时候就加上非空约束; 我们认为活动名称不能重复，那么给 \_name* 加上唯一约束也是一个不错的选择，
+我们知道 total_number 和 participate_number 都不可能是 `NULL`, 那么最好在设计表的时候就加上非空约束; 我们认为活动名称不能重复，那么给 name 加上唯一约束也是一个不错的选择，
 
 ```sql
 CREATE TABLE activity (
-  id int(11) primary key AUTO_INCREMENT,
+  id int(11) PRIMARY KEY AUTO_INCREMENT,
   name varchar(50) UNIQUE NOT NULL,
   total_number int(11) NOT NULL  COMMENT '可报名人数',
   participate_number int(11) NOT NULL COMMENT '已报名人数',
@@ -85,15 +85,15 @@ CREATE TABLE activity (
 如果我们知道了每个员工的工资详情，只需要知道各个员工所在部门，就可以通过 SQL 直接计算出来，而不需要把所有员工的数据都取出，然后在业务里面进行计算, 更不需要额外的 table 来存储部门和公司的整体薪水信息，因为这些数据都是可以从员工的工资表推演出来.下面是表的设计和模拟数据：
 
 ```sql
-CREATE TABLE company (id int(11) primary key AUTO_INCREMENT, name varchar(50) NOT NULL);
+CREATE TABLE company (id int(11) PRIMARY KEY AUTO_INCREMENT, name varchar(50) NOT NULL);
 CREATE TABLE depart (
-  id int(11) primary key AUTO_INCREMENT,
+  id int(11) PRIMARY KEY AUTO_INCREMENT,
   name varchar(50) NOT NULL,
   company_id int(11) NOT NULL REFERENCES company(id)
   );
 
 CREATE TABLE staff (
-  id int(11) primary key AUTO_INCREMENT,
+  id int(11) PRIMARY KEY AUTO_INCREMENT,
   name varchar(50) NOT NULL,
   depart_id int(11) NOT NULL REFERENCES depart(id),
   salary DECIMAL(10, 2) NOT NULL,
@@ -121,7 +121,7 @@ INSERT INTO staff (name, depart_id, salary, subsidy, tax) VALUES
 如果需要查询所有员工薪水信息
 
 ```sql
-SELECT name, salary, subsidy, tax, salary + subsidy - tax as income from staff;
+SELECT name, salary, subsidy, tax, salary + subsidy - tax AS income FROM staff;
 ---
 +--------+---------+---------+-------+---------+
 | name   | salary  | subsidy | tax   | income  |
@@ -142,12 +142,12 @@ SELECT name, salary, subsidy, tax, salary + subsidy - tax as income from staff;
 
 ```sql
 SELECT depart.name,
-sum(staff.salary) as salary_total,
-max(staff.salary) as salary_max,
-avg(staff.salary) as salary_avg,
-sum(staff.subsidy) as subsidy_total,
-sum(staff.tax) as tax_total,
-sum(staff.salary + staff.subsidy - staff.tax) as income_total
+sum(staff.salary) AS salary_total,
+max(staff.salary) AS salary_max,
+avg(staff.salary) AS salary_avg,
+sum(staff.subsidy) AS subsidy_total,
+sum(staff.tax) AS tax_total,
+sum(staff.salary + staff.subsidy - staff.tax) AS income_total
 FROM staff JOIN depart
 ON staff.depart_id = depart.id GROUP BY depart_id;
 ---
@@ -166,12 +166,12 @@ ON staff.depart_id = depart.id GROUP BY depart_id;
 
 ```sql
 SELECT company.name,
-sum(staff.salary) as salary_total,
-max(staff.salary) as salary_max,
-avg(staff.salary) as salary_avg,
-sum(staff.subsidy) as subsidy_total,
-sum(staff.tax) as tax_total,
-sum(staff.salary + staff.subsidy - staff.tax) as income_total
+sum(staff.salary) AS salary_total,
+max(staff.salary) AS salary_max,
+avg(staff.salary) AS salary_avg,
+sum(staff.subsidy) AS subsidy_total,
+sum(staff.tax) AS tax_total,
+sum(staff.salary + staff.subsidy - staff.tax) AS income_total
 FROM staff JOIN depart
 ON staff.depart_id = depart.id JOIN company ON depart.company_id=company.id GROUP BY company_id;
 
@@ -193,7 +193,7 @@ ON staff.depart_id = depart.id JOIN company ON depart.company_id=company.id GROU
 
 ```sql
 create TABLE product (
-  id int(11) primary key AUTO_INCREMENT,
+  id int(11) PRIMARY KEY AUTO_INCREMENT,
   name varchar(50) NOT NULL,
   price DECIMAL(10, 2) NOT NULL,
   code varchar(50) NOT NULL,
@@ -229,19 +229,19 @@ ALTER TABLE product add column activity_id int(11) COMMENT "促销活动";
 
 ```sql
 CREATE TABLE market_images (
-  id int(11) primary key AUTO_INCREMENT,
+  id int(11) PRIMARY KEY AUTO_INCREMENT,
   image_url varchar(255) NOT NULL,
   product_id int(11) NOT NULL REFERENCES product(id)
 );
 
 CREATE TABLE product_activity (
-  id int(11) primary key AUTO_INCREMENT,
+  id int(11) PRIMARY KEY AUTO_INCREMENT,
   product_id int(11) NOT NULL REFERENCES product(id),
   activity_id int(11)
 );
 
 CREATE TABLE product_discount (
-  id int(11) primary key AUTO_INCREMENT,
+  id int(11) PRIMARY KEY AUTO_INCREMENT,
   product_id int(11) NOT NULL REFERENCES product(id),
   activity_id int(11)
 );
@@ -285,7 +285,7 @@ class Address:
 
 class Order(Base):
     id = Column(BigIntger, primary_key=True)
-    _address = Column(JSON)
+    _address = Column('address', JSON)
 
     @property
     def address(self)-> Address:
@@ -325,9 +325,9 @@ order.address.mame
 1. 业务边界（Boundary）更加清晰，代码易于维护。
 1. 更利于编写测试，测试 _Business Model_ 比 _ORM Model_ 更有意义也更方便。
 
-_Business Model_ 可以是一个类（class）， 也可以是一个模块（module）。并不是说有了 _Business Modal_，我们就完全不能直接操作 _ORM Model_ 了，简单的 CRUD 操作往往也没有必要引入额外的 layer, 什么时候用 _Business Model_ 也没有金科玉律，需要根据具体业务场景做分析判断。
+_Business Model_ 可以是一个类（class）， 也可以是一个模块（module）。并不是说有了 _Business Model_，我们就完全不能直接操作 _ORM Model_ 了，简单的 CRUD 操作往往也没有必要引入额外的 layer, 什么时候用 _Business Model_ 也没有金科玉律，需要根据具体业务场景做分析判断。
 
-引入 _Business Model_ 还有一个好处就是，如果已经存在一个比较庞大或者设计不太好的 _ORM Model_ 时，可以通过 _Business Model_ 把这些 **dirty** 的部分集中起来，暴露一个简单 API 给其他业务使用。这个时候 _Business Model_ 就相当与一个 [facade](https://en.wikipedia.org/wiki/Facade)。
+引入 _Business Model_ 还有一个好处就是，如果已经存在一个比较庞大或者设计不太好的 _ORM Model_ 时，可以通过 _Business Model_ 把这些 **dirty** 的部分集中起来，暴露一个简单 API 给其他业务使用。这个时候 _Business Model_ 就相当于一个 [facade](https://en.wikipedia.org/wiki/Facade)。
 
 ## 不要把产品的需求直接映射到数据库表的字段
 
@@ -343,9 +343,9 @@ ALTER TABLE activity add column end_at DATETIME COMMENT '结束时间';
 对未开始，已开始，已结束的活动进行查询:
 
 ```sql
-SELECT * from activity where now() < begin_at;
-SELECT * from activity where begin_at < now() < end_at AND participate_number < total_number;
-SELECT * from activity where now() > end_at OR participate_number = total_number;
+SELECT * FROM activity WHERE now() < begin_at;
+SELECT * FROM activity WHERE begin_at < now() < end_at AND participate_number < total_number;
+SELECT * FROM activity WHERE now() > end_at OR participate_number = total_number;
 ```
 
 我们可以在 API 定义 status 字段返回给前端，但是 status 的实现方式则完全由自己把控。如果强行在数据库定义 status 字段，还需要解决状态随时间同步的问题， 同时带来了潜在的数据不一致隐患。
