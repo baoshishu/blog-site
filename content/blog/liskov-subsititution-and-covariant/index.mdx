@@ -112,9 +112,8 @@ class Child(Base):
 
 ```python
 class Base:
-    def f1(self)->str:
+    def f1(self)->str:...
 
-    def f2(self)->str:...
 
 class Child(Base):
     def f1(self)->int:
@@ -267,7 +266,7 @@ class Y(X):
 
 ## Takeaway
 
-有意思的是， 并非所有语言的泛型系统设计都考虑到了相关性, 目前大火的 TypeScript 就是其中的代表，Typescript 泛型类的相关性都是 covariant 的。
+有意思的是， 并非所有语言的泛型系统设计都考虑到了相关性, 目前大火的 TypeScript 就是其中的代表，TypeScript 泛型类的相关性都是 covariant 的。
 
 ```typescript
 var a: (string | number)[] = []
